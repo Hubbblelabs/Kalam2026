@@ -10,40 +10,72 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Primary Blue - Trust · Technology · Institution
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          DEFAULT: '#0B3C5D',
+          50: '#E8F4FC',
+          100: '#C5E1F5',
+          200: '#8DC4EB',
+          300: '#5AA7DE',
+          400: '#2B89CF',
+          500: '#1C6BA8',
+          600: '#0B3C5D',
+          700: '#0A3451',
+          800: '#082B43',
+          900: '#062236',
+          950: '#041829',
         },
+        // Primary Yellow - Energy · Youth · Innovation (CTA)
+        accent: {
+          DEFAULT: '#F5B301',
+          50: '#FFFBEB',
+          100: '#FFF4CC',
+          200: '#FFEA99',
+          300: '#FFE066',
+          400: '#FFD633',
+          500: '#F5B301',
+          600: '#D49B00',
+          700: '#A37700',
+          800: '#725300',
+          900: '#412F00',
+          950: '#291E00',
+        },
+        // Secondary Blue - UI elements
         secondary: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7e22ce',
-          800: '#6b21a8',
-          900: '#581c87',
-          950: '#3b0764',
+          DEFAULT: '#1C5D99',
+          50: '#EBF4FC',
+          100: '#D1E6F7',
+          200: '#A3CEEF',
+          300: '#75B5E7',
+          400: '#479CDF',
+          500: '#1C5D99',
+          600: '#1A5489',
+          700: '#154570',
+          800: '#103657',
+          900: '#0B273E',
+          950: '#061826',
         },
+        // Soft Yellow - Background accents
+        'soft-yellow': '#FFF4CC',
+        // Neutral Light - Clean background
+        'neutral-light': '#F9FAFB',
+        // Neutral Dark - Text & contrast
+        'neutral-dark': '#1C2533',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         heading: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
       },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.5s ease-out',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
       keyframes: {
         fadeIn: {
@@ -54,8 +86,16 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
