@@ -17,15 +17,15 @@ export function HeroSection() {
   const scale = Math.max(0.85, 1 - scrollY / 3000);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-20 pt-32">
       {/* Clean background */}
-      {/* Clean background - Removed to show CursorSpotlight */}\n
+      {/* Clean background - Removed to show CursorSpotlight */}
 
       {/* Cursor Spotlight Effect with Interactive Dots */}
       <CursorSpotlight />
 
       {/* Floating 3D Element Container */}
-      {/* 3D Element Removed for cleaner design */}\n
+      {/* 3D Element Removed for cleaner design */}
 
       {/* Content */}
       <div
@@ -51,7 +51,7 @@ export function HeroSection() {
 
         {/* Main title */}
         <h1
-          className="font-heading text-7xl md:text-9xl lg:text-[11rem] font-bold tracking-tight animate-fade-in-up leading-[0.9]"
+          className="font-heading text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] font-bold tracking-tight animate-fade-in-up leading-[0.9]"
         >
           <span style={{ color: '#1C5D99' }}>Kalam</span>
           <span

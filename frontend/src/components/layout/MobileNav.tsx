@@ -11,7 +11,11 @@ const navLinks = [
     { href: '/contact', label: 'Contact' },
 ];
 
-export function MobileNav() {
+interface MobileNavProps {
+    isScrolled: boolean;
+}
+
+export function MobileNav({ isScrolled }: MobileNavProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -19,7 +23,7 @@ export function MobileNav() {
             {/* Hamburger Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="md:hidden p-2 text-white hover:text-accent transition-colors"
+                className={`md:hidden p-2 transition-colors ${isScrolled ? 'text-white hover:text-accent' : 'text-primary hover:text-accent-600'}`}
                 aria-label="Open menu"
             >
                 <svg

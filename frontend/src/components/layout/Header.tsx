@@ -75,7 +75,7 @@ export function Header() {
           </Link>
 
           {/* Mobile Navigation */}
-          <MobileNav />
+          <MobileNav isScrolled={isScrolled} />
         </div>
       </div>
     </header>

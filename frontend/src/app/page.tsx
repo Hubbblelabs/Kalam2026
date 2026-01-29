@@ -89,7 +89,7 @@ export default function Home() {
         <section className="section-padding bg-surface-50">
           <div className="container-custom">
             <ScrollSection animation="fade-up">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 {stats.map((stat, index) => (
                   <div key={stat.label} className="text-center">
                     <p className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-gradient">
