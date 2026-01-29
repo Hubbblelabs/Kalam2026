@@ -1,0 +1,21 @@
+# Node
+node_modules
+npm-debug.log
+pnpm-lock.yaml
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Build
+.next
+dist
+build
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
