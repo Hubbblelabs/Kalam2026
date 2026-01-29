@@ -169,7 +169,7 @@ export function CursorSpotlight({ className = '' }: CursorSpotlightProps) {
     return (
         <canvas
             ref={canvasRef}
-            className={`fixed inset-0 pointer-events-none ${className}`}
+            className={`absolute inset-0 pointer-events-none ${className}`}
             style={{ zIndex: 0 }}
         />
     );

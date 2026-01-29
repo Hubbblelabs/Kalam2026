@@ -50,7 +50,7 @@ export function MobileNav({ isScrolled }: MobileNavProps) {
 
             {/* Slide-out Panel */}
             <div
-                className={`fixed top-0 right-0 h-full w-80 bg-primary z-50 transform transition-transform duration-300 ease-out md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed top-0 right-0 h-full w-80 bg-[#0B3C5D] z-[60] transform transition-transform duration-300 ease-out md:hidden border-l border-white/10 ${isOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
                 {/* Header */}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 
 interface EventCardProps {
     title: string;
@@ -17,71 +18,54 @@ export function EventCard({
     href,
     accentColor = 'blue'
 }: EventCardProps) {
-    const accentStyles = {
-        blue: 'from-primary to-secondary',
-        orange: 'from-accent-orange to-accent',
-        yellow: 'from-accent to-accent-400'
+    // Map accent colors to hex values for inline styles if needed, 
+    // or just use them for subtle border/bg classes.
+    const colorMap = {
+        blue: '#1C5D99',
+        orange: '#FF8C00',
+        yellow: '#F5B301'
     };
 
     return (
         <Link
             href={href}
-            className="group relative block"
+            className="group relative flex flex-col h-full bg-white rounded-[2rem] p-8 border border-black/5 hover:border-black/10 transition-all duration-500 hover:shadow-2xl hover:shadow-black/5 overflow-hidden"
         >
-            <div className="glass-card rounded-2xl p-8 card-hover overflow-hidden">
-                {/* Gradient accent line at top */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${accentStyles[accentColor]}`} />
+            {/* Hover Gradient Background */}
+            <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+                style={{ background: `radial-gradient(circle at top right, ${colorMap[accentColor]}, transparent 70%)` }}
+            />
 
-                {/* Pixel art decoration in corner */}
-                <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
-                    <div className="grid grid-cols-3 gap-1">
-                        {[...Array(9)].map((_, i) => (
-                            <div
-                                key={i}
-                                className={`w-2 h-2 rounded-sm ${i % 3 === 0 ? 'bg-primary' : 'bg-transparent'}`}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-                {/* Icon */}
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition-transform">
+            {/* Header: Icon + Arrow */}
+            <div className="flex justify-between items-start mb-8">
+                <div 
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
+                    style={{ backgroundColor: colorMap[accentColor] }}
+                >
                     {icon}
                 </div>
-
-                {/* Title */}
-                <h4 className="font-heading text-2xl font-bold text-text mb-3">
-                    {title}
-                </h4>
-
-                {/* Description */}
-                <p className="text-text-muted leading-relaxed mb-6">
-                    {description}
-                </p>
-
-                {/* Enter CTA */}
-                <div className="flex items-center gap-2 text-primary font-semibold group-hover:gap-4 transition-all">
-                    <span>Enter</span>
-                    <svg
-                        className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                    </svg>
-                </div>
-
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${accentStyles[accentColor]} opacity-10`} />
+                
+                <div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300">
+                    <ArrowUpRight className="w-5 h-5 transform group-hover:rotate-45 transition-transform duration-300" />
                 </div>
             </div>
+
+            {/* Content */}
+            <div className="relative z-10 mt-auto">
+                <h4 className="font-heading text-3xl font-bold text-[#1C2533] mb-3 leading-tight group-hover:translate-x-1 transition-transform duration-300">
+                    {title}
+                </h4>
+                <p className="text-[#6B7B8C] text-lg leading-relaxed group-hover:text-[#1C2533] transition-colors duration-300">
+                    {description}
+                </p>
+            </div>
+            
+            {/* Decorative background shape */}
+            <div 
+                className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
+                style={{ backgroundColor: colorMap[accentColor] }}
+            />
         </Link>
     );
 }
