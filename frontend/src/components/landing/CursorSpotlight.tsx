@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback } from 'react';
 
 interface CursorSpotlightProps {
     className?: string;
+    theme?: 'light' | 'dark';
 }
 
 interface Point {
@@ -21,7 +22,7 @@ interface Dot {
     baseSize: number;
 }
 
-export function CursorSpotlight({ className = '' }: CursorSpotlightProps) {
+export function CursorSpotlight({ className = '', theme = 'light' }: CursorSpotlightProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const mouseRef = useRef({ x: -1000, y: -1000 });
     const trailRef = useRef<Point[]>([]);
@@ -29,10 +30,10 @@ export function CursorSpotlight({ className = '' }: CursorSpotlightProps) {
     const animationRef = useRef<number | null>(null);
 
     // Configuration
-    const SPACING = 16;
-    const DOT_BASE_SIZE = 1.2;
-    const MAX_TRAIL_LENGTH = 25;
-    const TRAIL_WIDTH = 100;
+    const SPACING = 20; // Increased spacing for better visibility
+    const DOT_BASE_SIZE = 1.5;
+    const MAX_TRAIL_LENGTH = 20;
+    const TRAIL_WIDTH = 150;
 
     const initDots = useCallback((width: number, height: number) => {
         const dots: Dot[] = [];
@@ -62,7 +63,6 @@ export function CursorSpotlight({ className = '' }: CursorSpotlightProps) {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Update trail
@@ -71,87 +71,84 @@ export function CursorSpotlight({ className = '' }: CursorSpotlightProps) {
             trailRef.current.shift();
         }
 
-        // Age points in trail
         trailRef.current.forEach(point => point.age++);
-        // Remove old points
         trailRef.current = trailRef.current.filter(p => p.age < MAX_TRAIL_LENGTH);
 
-        // Update and draw dots
         dotsRef.current.forEach((dot) => {
-            // Calculate influence from trail (fluid effect)
             let scale = 1;
-            let opacity = 0.1; // Base faint visibility
+            let opacity = 0.2; // Increased base opacity for visibility
 
-            // Check distance to current mouse first
             const dxMouse = mouseRef.current.x - dot.baseX;
             const dyMouse = mouseRef.current.y - dot.baseY;
-            const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
 
-            // Check distance to trail points for "flow"
             for (const point of trailRef.current) {
                 const dx = point.x - dot.baseX;
                 const dy = point.y - dot.baseY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < TRAIL_WIDTH) {
-                    // Points closer to trail center and newer = stronger effect
                     const factor = (1 - dist / TRAIL_WIDTH) * (1 - point.age / MAX_TRAIL_LENGTH);
-                    scale = Math.max(scale, 1 + factor * 2.5);
-                    opacity = Math.max(opacity, 0.1 + factor * 0.8);
+                    scale = Math.max(scale, 1 + factor * 3);
+                    opacity = Math.max(opacity, 0.5 + factor * 0.5); // Higher max opacity
                 }
             }
 
-            // Smoothly interpolate size
             dot.size = dot.size + (dot.baseSize * scale - dot.size) * 0.1;
 
             ctx.beginPath();
             ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
 
-            // Color logic: Blue dots, becoming brighter/Yellow-ish near cursor
             if (opacity > 0.3) {
-                // Active/hot dots
-                ctx.fillStyle = `rgba(245, 179, 1, ${opacity})`; // Yellow/Gold
+                // Active Color (Gold/Yellow)
+                ctx.fillStyle = `rgba(245, 179, 1, ${opacity})`;
             } else {
-                // Dormant dots
-                ctx.fillStyle = `rgba(11, 60, 93, ${opacity})`; // Deep Blue
+                // Dormant Color based on theme
+                if (theme === 'dark') {
+                    // White/Light Blue for dark background - MORE VISIBLE NOW
+                    ctx.fillStyle = `rgba(255, 255, 255, 0.15)`;
+                } else {
+                    // Deep Blue for light background
+                    ctx.fillStyle = `rgba(11, 60, 93, 0.15)`;
+                }
             }
             ctx.fill();
         });
 
-        // Draw main cursor glow
-        if (mouseRef.current.x > 0) {
+        // Mouse glow for dark theme visibility
+        if (theme === 'dark' && mouseRef.current.x > 0) {
             const gradient = ctx.createRadialGradient(
                 mouseRef.current.x, mouseRef.current.y, 0,
-                mouseRef.current.x, mouseRef.current.y, 100
+                mouseRef.current.x, mouseRef.current.y, 150
             );
-            gradient.addColorStop(0, 'rgba(29, 93, 153, 0.1)'); // Blue center glow
-            gradient.addColorStop(1, 'rgba(245, 179, 1, 0)');
-
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.05)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height); // Optimized check needed if full fill is heavy? just fill rect around mouse
-
-            // Custom Cursor
-            ctx.beginPath();
-            ctx.arc(mouseRef.current.x, mouseRef.current.y, 6, 0, Math.PI * 2);
-            ctx.fillStyle = '#F5B301'; // Yellow
-            ctx.fill();
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         animationRef.current = requestAnimationFrame(animate);
-    }, []);
+    }, [theme]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const handleResize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initDots(canvas.width, canvas.height);
+            const parent = canvas.parentElement;
+            if (parent) {
+                const rect = parent.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                initDots(canvas.width, canvas.height);
+            }
         };
 
         const handleMouseMove = (e: MouseEvent) => {
-            mouseRef.current = { x: e.clientX, y: e.clientY };
+            const rect = canvas.getBoundingClientRect();
+            mouseRef.current = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
         };
 
         handleResize();

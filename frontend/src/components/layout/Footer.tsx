@@ -1,156 +1,173 @@
-import Link from 'next/link';
+'use client';
 
-const footerLinks = {
-  quickLinks: [
-    { href: '/events', label: 'Events' },
-    { href: '/schedule', label: 'Schedule' },
-    { href: '/register', label: 'Register' },
-    { href: '/sponsors', label: 'Sponsors' },
-  ],
-  support: [
-    { href: '/contact', label: 'Contact Us' },
-    { href: '/faq', label: 'FAQ' },
-    { href: '/terms', label: 'Terms of Service' },
-    { href: '/privacy', label: 'Privacy Policy' },
-  ],
-};
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { Instagram, Twitter, Linkedin, Facebook, ArrowUpRight, Mail, Phone } from 'lucide-react';
+import { CursorSpotlight } from '../landing/CursorSpotlight';
 
 const socialLinks = [
-  { href: 'https://instagram.com', label: 'IG', name: 'Instagram' },
-  { href: 'https://twitter.com', label: 'TW', name: 'Twitter' },
-  { href: 'https://linkedin.com', label: 'LI', name: 'LinkedIn' },
-  { href: 'https://youtube.com', label: 'YT', name: 'YouTube' },
+  { href: 'https://www.instagram.com/siet_kalam_official?igsh=MWhxZjNmNjUxc3ptdg==', icon: Instagram },
+  { href: 'https://x.com/SietkalamOffl?t=kXFXDRayKEG4s3vDU8DZwA&s=09', icon: Twitter },
+  { href: 'https://www.linkedin.com/school/sri-shakthi-institute-of-engineering-&-technology/', icon: Linkedin },
+  { href: 'https://www.facebook.com/share/18qb6GWkCr/', icon: Facebook },
 ];
 
 export function Footer() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = entry.isIntersecting;
+        window.dispatchEvent(new CustomEvent('footer-visibility-change', { detail: isVisible }));
+      },
+      { threshold: 0.1 } // Trigger when 10% of footer is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <footer className="bg-primary text-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 dot-grid-light opacity-10" />
+    <div
+      ref={containerRef}
+      className='relative h-auto md:h-[800px]'
+      style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+    >
+      <div className='relative md:fixed bottom-0 h-auto md:h-[800px] w-full'>
+        <div className="h-full w-full bg-[#1C2533] text-[#Fdfdf8] flex flex-col justify-between relative overflow-hidden">
 
-      {/* Contact Section Banner */}
-      <div className="relative border-b border-white/10">
-        <div className="container-custom py-16 text-center">
-          <h2 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            CONTACT US
-          </h2>
-          <p className="mt-4 text-white/70 max-w-xl mx-auto">
-            Have questions? Get in touch with our team.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block mt-6 btn-accent rounded-xl"
-          >
-            Get in Touch
-          </Link>
-        </div>
-      </div>
+          {/* 3D Background - Reduced opacity for subtle effect */}
+          <div className="absolute inset-0 opacity-40 pointer-events-none">
+            <CursorSpotlight theme="dark" />
+          </div>
 
-      {/* Main Footer Content */}
-      <div className="relative container-custom py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          {/* Brand Column */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="font-heading text-2xl font-bold">
-              Kalam<span className="text-accent">2k26</span>
-            </Link>
-            <p className="mt-4 text-white/60 text-sm leading-relaxed">
-              National Level Technical Symposium organized by Sri Shakthi College.
-              Join us for workshops, hackathons, competitions, and more.
-            </p>
+          {/* Absolute Grid Lines */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:6rem_6rem] pointer-events-none" />
 
-            {/* Social Links */}
-            <div className="flex gap-3 mt-6">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-xs font-bold text-white/70 hover:text-accent hover:border-accent transition-colors"
-                  aria-label={social.name}
-                >
-                  {social.label}
-                </a>
-              ))}
+          <div className="container-custom relative z-10 h-full flex flex-col pt-12 pb-10 ">
+
+            {/* Top Section: Links & Socials */}
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16 md:mb-auto">
+              <div className="w-full lg:w-auto flex flex-col gap-8">
+                <div>
+                  <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Connect</h3>
+                  <div className="flex gap-4">
+                    {socialLinks.map((social, i) => (
+                      <a
+                        key={i}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#F5B301] hover:text-[#1C2533] hover:scale-110 transition-all duration-300"
+                      >
+                        <social.icon className="w-4 h-4" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-4">Contact Us</h3>
+                  <div className="flex flex-col gap-3 text-white/60 text-sm">
+                    <a href="mailto:kalam@siet.ac.in" className="hover:text-white transition-colors flex items-center gap-3 group">
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#F5B301] group-hover:text-[#1C2533] transition-colors">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <span>kalam@siet.ac.in</span>
+                    </a>
+                    <a href="tel:+917540084863" className="hover:text-white transition-colors flex items-center gap-3 group">
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#F5B301] group-hover:text-[#1C2533] transition-colors">
+                        <Phone className="w-4 h-4" />
+                      </div>
+                      <span>(+91) 75400 84863</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-auto flex flex-col md:flex-row gap-12 lg:gap-24">
+                <div className="grid grid-cols-2 gap-12 md:gap-24">
+                  <div>
+                    <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Explore</h3>
+                    <ul className="space-y-4 text-lg font-medium text-white/60">
+                      <li><Link href="/events" className="hover:text-white transition-colors">Events</Link></li>
+                      <li><Link href="/schedule" className="hover:text-white transition-colors">Schedule</Link></li>
+                      <li><Link href="/sponsors" className="hover:text-white transition-colors">Sponsors</Link></li>
+                      <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Legal</h3>
+                    <ul className="space-y-4 text-lg font-medium text-white/60">
+                      <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                      <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                      <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Map Section */}
+                <div>
+                  <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Locate Us</h3>
+                  <div className="w-full md:w-[400px] h-[220px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5 ">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7913.527095429474!2d77.0720385!3d11.0407133!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85851693f4a5d%3A0x929165d4884224ee!2sSRI%20SHAKTHI%20INSTITUTE%20OF%20ENGINEERING%20AND%20TECHNOLOGY!5e1!3m2!1sen!2sin!4v1769852904243!5m2!1sen!2sin"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      className="w-full h-full"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            {/* Giant Typography Section */}
+            <div className="relative mt-8 md:mt-10">
+              <div className="w-full border-t border-white/10 mb-8" />
+
+              <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+                <div>
+                  <h1 className="font-heading font-black text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
+                    KALAM
+                  </h1>
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full pl-2 md:pl-8">
+                    <div className="text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
+                    <div className="text-white/40 text-xs md:text-base max-w-md text-left md:text-right mt-2 md:mt-0 leading-relaxed hover:text-white transition-colors">
+                      <a href="https://maps.app.goo.gl/evaogygK4xEtuNWQ8" target="_blank" rel="noopener noreferrer">
+                        Sri Shakthi Institute of Engineering and Technology<br />
+                        L&T Bypass Road, Coimbatore - 641 062
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating 'Back to Top' or Action Button could go here */}
+                <div className="mb-8 md:mb-16">
+                  <Link href="/register" className="group flex items-center gap-4 text-2xl font-bold bg-white text-[#1C2533] py-4 px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300">
+                    Register Now
+                    <ArrowUpRight className="w-8 h-8 group-hover:rotate-45 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="mt-8 flex justify-between text-white/30 text-sm">
+              <p>&copy; 2026 Kalam</p>
+              <p>Designed with passion.</p>
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-accent mb-4">Quick Links</h4>
-            <ul className="space-y-3">
-              {footerLinks.quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/60 hover:text-accent transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="font-semibold text-accent mb-4">Support</h4>
-            <ul className="space-y-3">
-              {footerLinks.support.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/60 hover:text-accent transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="font-semibold text-accent mb-4">Contact</h4>
-            <ul className="space-y-3 text-sm text-white/60">
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 mt-0.5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span>Sri Shakthi College<br />Coimbatore, Tamil Nadu</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <a href="mailto:kalam@siet.ac.in" className="hover:text-accent transition-colors">
-                  kalam@siet.ac.in
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span>+91 98765 43210</span>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
-
-      {/* Copyright Bar */}
-      <div className="relative border-t border-white/10">
-        <div className="container-custom py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-white/50">
-            © {new Date().getFullYear()} Kalam 2k26. All rights reserved.
-          </p>
-          <p className="text-sm text-white/50">
-            Crafted with ❤️ by Sri Shakthi Students
-          </p>
-        </div>
-      </div>
-    </footer>
+    </div>
   );
 }

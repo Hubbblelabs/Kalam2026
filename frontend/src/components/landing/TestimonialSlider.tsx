@@ -52,6 +52,7 @@ const testimonials: Testimonial[] = [
 export function TestimonialSlider() {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isPaused, setIsPaused] = useState(false);
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     useEffect(() => {
         const scrollContainer = scrollRef.current;
@@ -89,41 +90,97 @@ export function TestimonialSlider() {
                 className="flex gap-6 overflow-x-hidden no-scrollbar py-4"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
+                style={{ perspective: '1000px' }}
             >
                 {/* Double the testimonials for seamless infinite scroll */}
                 {[...testimonials, ...testimonials].map((testimonial, index) => (
                     <div
                         key={index}
-                        className="flex-shrink-0 w-[350px] md:w-[400px] glass-card rounded-2xl p-6 hover-lift"
+                        className="flex-shrink-0 w-[350px] md:w-[400px] glass-card rounded-2xl p-6 transition-all duration-500"
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        style={{
+                            transform: hoveredIndex === index
+                                ? 'translateY(-12px) scale(1.02) rotateX(2deg)'
+                                : 'translateY(0) scale(1) rotateX(0deg)',
+                            boxShadow: hoveredIndex === index
+                                ? '0 25px 50px -12px rgba(28, 93, 153, 0.25), 0 0 0 1px rgba(28, 93, 153, 0.1)'
+                                : '0 8px 32px rgba(0, 0, 0, 0.08)',
+                            transformStyle: 'preserve-3d',
+                        }}
                     >
                         {/* Header */}
                         <div className="flex items-center gap-4 mb-4">
-                            {/* Avatar placeholder */}
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+                            {/* Avatar with animation */}
+                            <div
+                                className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold transition-transform duration-500"
+                                style={{
+                                    transform: hoveredIndex === index ? 'scale(1.15) rotate(6deg)' : 'scale(1)',
+                                    boxShadow: hoveredIndex === index
+                                        ? '0 8px 20px rgba(28, 93, 153, 0.4)'
+                                        : '0 4px 10px rgba(0, 0, 0, 0.1)',
+                                }}
+                            >
                                 {testimonial.name.split(' ').map(n => n[0]).join('')}
                             </div>
                             <div>
-                                <h4 className="font-semibold text-text">{testimonial.name}</h4>
+                                <h4
+                                    className="font-semibold text-text transition-colors duration-300"
+                                    style={{ color: hoveredIndex === index ? '#1C5D99' : undefined }}
+                                >
+                                    {testimonial.name}
+                                </h4>
                                 <p className="text-sm text-text-muted">{testimonial.role}</p>
                             </div>
                         </div>
 
-                        {/* Content */}
-                        <p className="text-text-muted leading-relaxed mb-4">
-                            "{testimonial.content}"
-                        </p>
+                        {/* Content with quote marks */}
+                        <div className="relative">
+                            <span
+                                className="absolute -top-2 -left-1 text-4xl text-[#F5B301]/30 font-serif leading-none transition-all duration-300"
+                                style={{
+                                    transform: hoveredIndex === index ? 'scale(1.2)' : 'scale(1)',
+                                    opacity: hoveredIndex === index ? 0.6 : 0.3,
+                                }}
+                            >
+                                "
+                            </span>
+                            <p className="text-text-muted leading-relaxed mb-4 pl-4">
+                                {testimonial.content}
+                            </p>
+                        </div>
 
-                        {/* Skills/Interests */}
+                        {/* Skills/Interests with staggered animation */}
                         <div className="flex flex-wrap gap-2">
                             {testimonial.skills.map((skill, i) => (
                                 <span
                                     key={i}
-                                    className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
+                                    className="px-3 py-1 text-xs font-medium rounded-full transition-all duration-300"
+                                    style={{
+                                        backgroundColor: hoveredIndex === index
+                                            ? 'rgba(28, 93, 153, 0.15)'
+                                            : 'rgba(11, 60, 93, 0.1)',
+                                        color: hoveredIndex === index ? '#1C5D99' : '#0B3C5D',
+                                        transform: hoveredIndex === index
+                                            ? `translateY(-2px) translateX(${i * 2}px)`
+                                            : 'translateY(0)',
+                                        transitionDelay: `${i * 50}ms`,
+                                    }}
                                 >
                                     {skill}
                                 </span>
                             ))}
                         </div>
+
+                        {/* Decorative corner accent */}
+                        <div
+                            className="absolute top-0 right-0 w-20 h-20 pointer-events-none transition-opacity duration-500"
+                            style={{
+                                background: 'radial-gradient(circle at top right, rgba(245, 179, 1, 0.2) 0%, transparent 70%)',
+                                opacity: hoveredIndex === index ? 1 : 0,
+                                borderRadius: '0 1rem 0 0',
+                            }}
+                        />
                     </div>
                 ))}
             </div>
