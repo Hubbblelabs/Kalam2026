@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { CategoryShowcase } from '@/components/landing/CategoryShowcase';
@@ -12,30 +11,30 @@ import { ArrowRight, Code, Cpu, Trophy, Mic, Rocket, Users, Sparkles } from 'luc
 const eventCategories = [
   {
     title: 'Workshops',
-    description: 'Master new technologies with hands-on sessions from industry experts.',
+    description: 'Deep dive into the future. From Generative AI to Blockchain forensics, master in-demand skills with hands-on guidance from industry leaders.',
     href: '/events?category=workshops',
     icon: <Cpu className="w-8 h-8" />,
     accentColor: 'blue' as const,
   },
   {
     title: 'Hackathons',
-    description: '48-hour intense coding battles. Build, Deploy, and Win.',
+    description: '48 hours of pure adrenaline. Assemble your team, tackle real-world problem statements, and build deployment-ready solutions for a ₹5L prize pool.',
     href: '/events?category=hackathons',
     icon: <Code className="w-8 h-8" />,
     accentColor: 'orange' as const,
   },
   {
     title: 'Competitions',
-    description: 'Showcase your skills in debugging, design, and paper presentations.',
+    description: 'The ultimate test of skill. Debugging relays, blind coding, UI/UX design battles, and CTF challenges. Prove you are the sharpest mind in the arena.',
     href: '/events?category=competitions',
     icon: <Trophy className="w-8 h-8" />,
     accentColor: 'yellow' as const,
   },
   {
-    title: 'Guest Lectures',
-    description: 'Gain insights from the visionaries shaping the future of tech.',
-    href: '/events?category=lectures',
-    icon: <Mic className="w-8 h-8" />,
+    title: 'Spotlights',
+    description: 'Beyond the code. Witness electric pro-shows, stand-up comedy, and inspiring keynotes from the visionaries shaping the tech landscape.',
+    href: '/events?category=spotlights',
+    icon: <Sparkles className="w-8 h-8" />,
     accentColor: 'blue' as const,
   },
 ];
@@ -54,14 +53,12 @@ const stats = [
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-[#Fdfdf8] text-[#1C2533] selection:bg-[#F5B301] selection:text-[#1C2533]">
-      <Header />
-
       <main className="flex-1">
         {/* Hero Section */}
         <HeroSection />
 
         {/* Marquee Separator */}
-        <MarqueeText items={marqueeItems} speed="normal" />
+        <MarqueeText items={marqueeItems} speed="fast" />
 
         {/* Stats Section - Typographic */}
         <section className="py-32 border-b border-black/5">

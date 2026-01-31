@@ -18,9 +18,9 @@ export function MarqueeText({
     const [scrollY, setScrollY] = useState(0);
 
     const speedMap = {
-        slow: '60s',
-        normal: '40s',
-        fast: '25s'
+        slow: '35s',
+        normal: '25s',
+        fast: '15s'
     };
 
     useEffect(() => {

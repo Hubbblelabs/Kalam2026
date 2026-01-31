@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { MobileNav } from './MobileNav';
+import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -15,13 +17,27 @@ const navLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const pathname = usePathname();
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+
+      // Show/Hide logic
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+      lastScrollY.current = currentScrollY;
+
+      // Style logic
+      setIsScrolled(currentScrollY > 20);
     };
 
     const handleFooterVisibility = (e: CustomEvent<boolean>) => {
+      // If footer is visible, hide navbar to avoid clash
       setIsHidden(e.detail);
     };
 
@@ -35,61 +51,71 @@ export function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ease-in-out ${isHidden ? '-translate-y-full' : 'translate-y-0'} ${isScrolled
-        ? 'bg-primary/95 backdrop-blur-md shadow-lg py-2 sm:py-3'
-        : 'bg-transparent py-3 sm:py-5'
-        }`}
-    >
-      <div className="container-custom flex items-center justify-between px-4 sm:px-6">
-        {/* Logo - Responsive sizing */}
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 md:pt-6 pointer-events-none">
+
+      {/* Floating Capsule */}
+      <header
+        className={cn(
+          "pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          "flex items-center justify-between px-2 md:px-3 py-2",
+          "rounded-full border border-white/10 shadow-2xl shadow-black/10",
+          "backdrop-blur-3xl bg-[#1C2533]/80 supports-[backdrop-filter]:bg-[#1C2533]/80",
+          isHidden ? "-translate-y-[200%] opacity-0" : "translate-y-0 opacity-100",
+          isScrolled ? "w-[90%] md:w-[60rem]" : "w-[95%] md:w-[70rem]"
+        )}
+      >
+
+        {/* Logo */}
         <Link
           href="/"
-          className={`font-heading text-lg sm:text-xl md:text-2xl font-bold transition-colors ${isScrolled ? 'text-white hover:text-accent' : 'text-primary hover:text-accent-600'}`}
+          className="ml-4 md:ml-6 font-heading text-lg md:text-2xl font-black tracking-tight text-white hover:text-[#F5B301] transition-colors whitespace-nowrap"
         >
-          Kalam<span className="text-accent">2k26</span>
+          Kalam<span className="text-[#F5B301]">2k26</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors relative group ${isScrolled ? 'text-white/80 hover:text-accent' : 'text-primary/80 hover:text-secondary'}`}
-            >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
-            </Link>
-          ))}
+        {/* Desktop Navigation - Clean Glass Style */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "relative px-5 py-2 text-sm font-medium rounded-full transition-all duration-300",
+                  isActive ? "text-white bg-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] font-semibold" : "text-white/70 hover:text-white hover:bg-white/5"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Right side - CTA + Mobile Menu */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* Login link - desktop only */}
+        {/* Right Actions */}
+        <div className="flex items-center gap-2 mr-1">
+          {/* Login Link */}
           <Link
             href="/login"
-            className={`hidden md:block text-sm font-medium transition-colors ${isScrolled ? 'text-white/80 hover:text-accent' : 'text-primary hover:text-accent-600'}`}
+            className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/70 hover:text-white transition-colors"
           >
             Login
           </Link>
 
-          {/* Register CTA - Hidden on small mobile, visible on larger screens */}
+          {/* Register CTA */}
           <Link
             href="/register"
-            className={`hidden sm:flex items-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm transition-all ${isScrolled
-              ? 'bg-accent text-text hover:bg-accent-400'
-              : 'bg-primary text-white hover:bg-primary-700 shadow-md'
-              }`}
+            className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-[#1C2533] hover:bg-[#F5B301] hover:text-[#1C2533] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)]"
           >
-            <span className="hidden sm:inline">Register</span>
-            <span className="sm:hidden">Sign Up</span>
+            Register
           </Link>
 
-          {/* Mobile Navigation */}
-          <MobileNav isScrolled={isScrolled} />
+          {/* Mobile Navigation Trigger */}
+          <div className="md:hidden">
+            <MobileNav navLinks={navLinks} />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 }

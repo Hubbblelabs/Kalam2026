@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Cpu, Code, Trophy, Mic } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -19,6 +19,43 @@ interface CategoryShowcaseProps {
 
 export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
     const [activeindex, setActiveIndex] = useState<number>(0);
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            const visibleEntry = entries.reduce((max, entry) =>
+                entry.intersectionRatio > max.intersectionRatio ? entry : max,
+                entries[0]);
+
+            if (visibleEntry && visibleEntry.isIntersecting && visibleEntry.intersectionRatio > 0.6) {
+                const index = cardRefs.current.indexOf(visibleEntry.target as HTMLDivElement);
+
+                if (index !== -1 && index !== activeindex) {
+                    // Clear existing timeout
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+                    // Set new timeout to debounce the switch
+                    timeoutRef.current = setTimeout(() => {
+                        setActiveIndex(index);
+                    }, 300); // 300ms delay to ensure user stopped scrolling or focused
+                }
+            }
+        };
+
+        const observer = new IntersectionObserver(observerCallback, {
+            root: null,
+            rootMargin: '-20% 0px -20% 0px', // Trigger when element is central
+            threshold: 0.6 // Require 60% visibility
+        });
+
+        cardRefs.current.forEach((ref) => {
+            if (ref) observer.observe(ref);
+        });
+
+        return () => observer.disconnect();
+    }, []);
 
     const colorMap = {
         blue: {
@@ -47,6 +84,7 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                 return (
                     <div
                         key={index}
+                        ref={(el) => { cardRefs.current[index] = el; }}
                         className={cn(
                             "relative flex-1 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group border border-black/5",
                             isActive ? "flex-[3] lg:flex-[4]" : "hover:flex-[1.2]"
@@ -78,11 +116,12 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
 
                                 <h3 className={cn(
                                     "font-heading font-bold text-2xl lg:text-4xl transition-all duration-500 origin-left whitespace-nowrap",
-                                    isActive ? "text-[#1C2533] scale-100" : "text-[#1C2533]/40 -rotate-90 lg:rotate-0 lg:origin-top-left translate-y-12 lg:translate-y-0"
+                                    isActive
+                                        ? "text-[#1C2533] scale-100 translate-x-0 translate-y-0 rotate-0"
+                                        : "text-[#1C2533]/40 rotate-0 translate-x-0 translate-y-0 lg:-rotate-90 lg:origin-top-left lg:translate-y-44 lg:translate-x-12"
                                 )}>
                                     <span className={cn(
-                                        "block lg:inline transition-all duration-500",
-                                        !isActive && "lg:-rotate-90 lg:absolute lg:left-10 lg:top-24 lg:origin-top-left"
+                                        "block transition-all duration-500",
                                     )}>
                                         {category.title}
                                     </span>
@@ -91,8 +130,8 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
 
                             {/* Expanded Content */}
                             <div className={cn(
-                                "space-y-6 transition-all duration-500 absolute bottom-10 left-10 right-10 lg:static",
-                                isActive ? "opacity-100 translate-y-0 delay-150" : "opacity-0 translate-y-8 pointer-events-none"
+                                "space-y-6 transition-all duration-500",
+                                isActive ? "opacity-100 translate-y-0 delay-150" : "opacity-0 translate-y-4 pointer-events-none absolute bottom-0 left-0 right-0 p-6"
                             )}>
                                 <p className="text-lg text-[#6B7B8C] leading-relaxed max-w-md">
                                     {category.description}
