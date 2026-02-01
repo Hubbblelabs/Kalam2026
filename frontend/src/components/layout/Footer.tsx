@@ -152,7 +152,7 @@ export function Footer() {
 
                 {/* Floating 'Back to Top' or Action Button could go here */}
                 <div className="mb-8 md:mb-16">
-                  <Link href="/register" className="group flex items-center gap-4 text-2xl font-bold bg-white text-[#1C2533] py-4 px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300">
+                  <Link href="/register" className="group flex items-center gap-4 text-2xl font-bold bg-white text-[#1C2533] py-4 px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
                     Register Now
                     <ArrowUpRight className="w-8 h-8 group-hover:rotate-45 transition-transform" />
                   </Link>

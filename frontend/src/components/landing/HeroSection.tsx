@@ -46,7 +46,7 @@ export function HeroSection() {
         }}
       >
         {/* Top Tagline */}
-        <div className="overflow-hidden mb-4">
+        <div className="overflow-hidden mt-8 md:mt-12 mb-4">
           <div
             className={`flex items-center gap-3 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             style={{ transitionDelay: '0.1s' }}
