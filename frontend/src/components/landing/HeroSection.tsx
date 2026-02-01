@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { ArrowRight, Globe } from 'lucide-react';
 import { MagneticButton } from '../ui/MagneticButton';
 import { CursorSpotlight } from './CursorSpotlight';
@@ -58,6 +59,7 @@ export function HeroSection() {
             <span className="h-[1px] w-8 bg-[#1C5D99]" />
           </div>
         </div>
+
 
         {/* Massive Typography with stagger animation */}
         <div className="relative font-heading font-black tracking-tighter leading-[0.85] select-none">
@@ -122,19 +124,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Floating Elements - Parallax */}
-      <div
-        className="absolute top-1/4 left-10 md:left-20 animate-float-slow opacity-60 hidden lg:block perspective-[1000px]"
-        style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-      >
-        <div
-          className="w-20 h-20 relative transform rotate-12 transition-transform hover:scale-110 duration-500"
-          style={{ transformStyle: 'preserve-3d' }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F5B301]/20 to-[#F5B301]/5 rounded-xl backdrop-blur-md border border-[#F5B301]/20 shadow-[0_8px_32px_0_rgba(245,179,1,0.1)]" />
-          <div className="absolute inset-0 bg-[#F5B301]/10 rounded-xl transform translate-z-4 translate-x-2 translate-y-2" />
-        </div>
-      </div>
 
       <div
         className="absolute bottom-1/4 right-10 md:right-20 animate-float opacity-60 hidden lg:block"

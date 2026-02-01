@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { Instagram, Twitter, Linkedin, Facebook, ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { CursorSpotlight } from '../landing/CursorSpotlight';
 
@@ -53,6 +54,16 @@ export function Footer() {
             {/* Top Section: Links & Socials */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16 md:mb-auto">
               <div className="w-full lg:w-auto flex flex-col gap-8">
+                {/* Footer Logo */}
+                {/* <div className="relative w-40 h-12 mb-2">
+                  <NextImage
+                    src="/kalam26-logo-hor.svg"
+                    alt="Kalam 2026"
+                    fill
+                    className="object-contain object-left opacity-90"
+                  />
+                </div> */}
+
                 <div>
                   <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Connect</h3>
                   <div className="flex gap-4">
@@ -115,7 +126,7 @@ export function Footer() {
                   <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Locate Us</h3>
                   <div className="w-full md:w-[400px] h-[220px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5 ">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7913.527095429474!2d77.0720385!3d11.0407133!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85851693f4a5d%3A0x929165d4884224ee!2sSRI%20SHAKTHI%20INSTITUTE%20OF%20ENGINEERING%20AND%20TECHNOLOGY!5e1!3m2!1sen!2sin!4v1769852904243!5m2!1sen!2sin"
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7913.527095429474!2d77.0720385!3d11.0407133!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85851693f4a5d%3A0x929165d4884224ee!2sSRI%20SHAKTHI%20INSTITUTE%20OF%20ENGINEERING%20AND%20TECHNOLOGY!5e0!3m2!1sen!2sin!4v1769852904243!5m2!1sen!2sin"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -134,14 +145,15 @@ export function Footer() {
             <div className="relative mt-8 md:mt-10">
               <div className="w-full border-t border-white/10 mb-8" />
 
-              <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-                <div>
-                  <h1 className="font-heading font-black text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-8">
+                {/* Typography Block */}
+                <div className="w-full md:w-auto text-center md:text-left">
+                  <h1 className="font-heading font-black text-[20vw] md:text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
                     KALAM
                   </h1>
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full pl-2 md:pl-8">
-                    <div className="text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
-                    <div className="text-white/40 text-xs md:text-base max-w-md text-left md:text-right mt-2 md:mt-0 leading-relaxed hover:text-white transition-colors">
+                  <div className="flex flex-col md:flex-row items-center md:items-center justify-between w-full pl-0 md:pl-8">
+                    <div className="text-[8vw] md:text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
+                    <div className="text-white/40 text-xs md:text-base max-w-md text-center md:text-right mt-2 md:mt-0 leading-relaxed hover:text-white transition-colors">
                       <a href="https://siet.ac.in/" target="_blank" rel="noopener noreferrer">
                         Sri Shakthi Institute of Engineering and Technology<br />
                         L&T Bypass Road, Coimbatore - 641 062
@@ -150,11 +162,19 @@ export function Footer() {
                   </div>
                 </div>
 
-                {/* Floating 'Back to Top' or Action Button could go here */}
-                <div className="mb-8 md:mb-16">
-                  <Link href="/register" className="group flex items-center gap-4 text-2xl font-bold bg-white text-[#1C2533] py-4 px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
+                {/* Logo & Register CTA */}
+                <div className="w-full md:w-auto mb-4 md:mb-16 flex flex-col items-center gap-4 md:gap-6">
+                  <div className="relative w-16 h-20 md:w-32 md:h-44">
+                    <NextImage
+                      src="/kalam26-logo.png"
+                      alt="Kalam 2026"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <Link href="/register" className="group flex items-center gap-2 md:gap-4 text-lg md:text-2xl font-bold bg-white text-[#1C2533] py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
                     Register Now
-                    <ArrowUpRight className="w-8 h-8 group-hover:rotate-45 transition-transform" />
+                    <ArrowUpRight className="w-5 h-5 md:w-8 md:h-8 group-hover:rotate-45 transition-transform" />
                   </Link>
                 </div>
               </div>

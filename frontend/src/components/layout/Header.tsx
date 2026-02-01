@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { MobileNav } from './MobileNav';
 import { cn } from '@/lib/utils';
@@ -70,9 +71,15 @@ export function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="ml-4 md:ml-6 font-heading text-lg md:text-2xl font-black tracking-tight text-white hover:text-[#F5B301] transition-colors whitespace-nowrap"
+          className="ml-4 md:ml-6 relative h-8 w-28 md:w-32 hover:opacity-80 transition-opacity"
         >
-          Kalam<span className="text-[#F5B301]">2k26</span>
+          <NextImage
+            src="/kalam26-logo-hor.svg"
+            alt="Kalam 2026"
+            fill
+            className="object-contain object-left"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation - Clean Glass Style */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Facebook, Instagram, Linkedin, Twitter, X } from 'lucide-react';
@@ -74,7 +75,16 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                 <div className="absolute bottom-[-10%] left-[-20%] w-[400px] h-[400px] bg-[#1C5D99]/10 rounded-full blur-[100px] pointer-events-none" />
 
                 {/* Content Container */}
-                <div className="h-full w-full flex flex-col justify-between px-6 pt-24 pb-12 overflow-y-auto">
+                <div className="h-full w-full flex flex-col justify-between px-6 pt-24 pb-12 overflow-y-auto relative">
+                    {/* Brand Logo */}
+                    <div className="absolute top-6 left-0 w-32 h-10">
+                        <NextImage
+                            src="/kalam26-logo-hor.svg"
+                            alt="Kalam 2026"
+                            fill
+                            className="object-contain object-left"
+                        />
+                    </div>
 
                     {/* Navigation - GIANT TYPOGRAPHY */}
                     <nav className="flex flex-col gap-6">
