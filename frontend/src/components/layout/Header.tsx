@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MobileNav } from './MobileNav';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/AuthContext';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -19,6 +20,7 @@ export function Header() {
   const [isHidden, setIsHidden] = useState(false);
   const pathname = usePathname();
   const lastScrollY = useRef(0);
+  const { openAuth } = useAuth(); // Use auth context
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,20 +97,20 @@ export function Header() {
         {/* Right Actions */}
         <div className="flex items-center gap-2 mr-1">
           {/* Login Link */}
-          <Link
-            href="/login"
-            className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/70 hover:text-white transition-colors"
+          <button
+            onClick={() => openAuth('login')}
+            className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/70 hover:text-white transition-colors cursor-pointer"
           >
             Login
-          </Link>
+          </button>
 
           {/* Register CTA */}
-          <Link
-            href="/register"
-            className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-[#1C2533] hover:bg-[#F5B301] hover:text-[#1C2533] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)]"
+          <button
+            onClick={() => openAuth('register')}
+            className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-[#1C2533] hover:bg-[#F5B301] hover:text-[#1C2533] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)] cursor-pointer"
           >
             Register
-          </Link>
+          </button>
 
           {/* Mobile Navigation Trigger */}
           <div className="md:hidden">

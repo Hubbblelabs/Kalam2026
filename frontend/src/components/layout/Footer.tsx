@@ -142,7 +142,7 @@ export function Footer() {
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full pl-2 md:pl-8">
                     <div className="text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
                     <div className="text-white/40 text-xs md:text-base max-w-md text-left md:text-right mt-2 md:mt-0 leading-relaxed hover:text-white transition-colors">
-                      <a href="https://maps.app.goo.gl/evaogygK4xEtuNWQ8" target="_blank" rel="noopener noreferrer">
+                      <a href="https://siet.ac.in/" target="_blank" rel="noopener noreferrer">
                         Sri Shakthi Institute of Engineering and Technology<br />
                         L&T Bypass Road, Coimbatore - 641 062
                       </a>

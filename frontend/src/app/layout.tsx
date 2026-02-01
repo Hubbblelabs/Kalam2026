@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
+import { AuthProvider } from '@/context/AuthContext';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -57,8 +59,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-white antialiased dark:bg-gray-950">
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+          <AuthModal />
+        </AuthProvider>
       </body>
     </html>
   );
