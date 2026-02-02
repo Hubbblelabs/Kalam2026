@@ -35,10 +35,10 @@ export function Footer() {
   return (
     <div
       ref={containerRef}
-      className='relative h-auto sm:h-auto md:h-auto lg:h-[800px]'
+      className='relative h-auto sm:h-auto md:h-auto lg:h-screen'
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
     >
-      <div className='relative lg:fixed bottom-0 h-auto lg:h-[800px] w-full'>
+      <div className='relative lg:fixed bottom-0 h-auto lg:h-screen w-full'>
         <div className="h-full w-full bg-[#1C2533] text-[#Fdfdf8] flex flex-col justify-between relative overflow-hidden">
 
           {/* 3D Background - Reduced opacity for subtle effect */}
@@ -49,10 +49,10 @@ export function Footer() {
           {/* Absolute Grid Lines */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:6rem_6rem] pointer-events-none" />
 
-          <div className="container-custom relative z-10 h-full flex flex-col pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 md:pb-10 px-4 sm:px-6 md:px-8">
+          <div className="container-custom relative z-10 h-full flex flex-col justify-between pt-8 sm:pt-10 md:pt-12 lg:pt-6 pb-6 sm:pb-8 md:pb-10 lg:pb-4 px-4 sm:px-6 md:px-8">
 
             {/* Top Section: Links & Socials */}
-            <div className="flex flex-col lg:flex-row justify-between items-start gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12 md:mb-16 lg:mb-auto">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12 md:mb-16 lg:mb-2">
               <div className="w-full lg:w-auto flex flex-col gap-8">
                 {/* Footer Logo */}
                 {/* <div className="relative w-40 h-12 mb-2">
@@ -124,7 +124,7 @@ export function Footer() {
                 {/* Map Section */}
                 <div>
                   <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-4 sm:mb-6">Locate Us</h3>
-                  <div className="w-full sm:w-[320px] md:w-[360px] lg:w-[400px] h-[180px] sm:h-[200px] md:h-[220px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5">
+                  <div className="w-full sm:w-[320px] md:w-[360px] lg:w-[400px] h-[180px] sm:h-[200px] md:h-[220px] lg:h-[180px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7913.527095429474!2d77.0720385!3d11.0407133!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85851693f4a5d%3A0x929165d4884224ee!2sSRI%20SHAKTHI%20INSTITUTE%20OF%20ENGINEERING%20AND%20TECHNOLOGY!5e0!3m2!1sen!2sin!4v1769852904243!5m2!1sen!2sin"
                       width="100%"
@@ -142,13 +142,13 @@ export function Footer() {
 
 
             {/* Giant Typography Section */}
-            <div className="relative mt-6 sm:mt-8 md:mt-10">
-              <div className="w-full border-t border-white/10 mb-4 sm:mb-6 md:mb-8" />
+            <div className="relative mt-6 sm:mt-8 md:mt-10 lg:mt-2">
+              <div className="w-full border-t border-white/10 mb-4 sm:mb-6 md:mb-8 lg:mb-4" />
 
               <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 sm:gap-6 md:gap-8">
                 {/* Typography Block */}
                 <div className="w-full md:w-auto text-center md:text-left">
-                  <h1 className="font-heading font-black text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
+                  <h1 className="font-heading font-black text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[15vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
                     KALAM
                   </h1>
                   <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full pl-0 sm:pl-4 md:pl-8">
