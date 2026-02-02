@@ -35,10 +35,10 @@ export function Footer() {
   return (
     <div
       ref={containerRef}
-      className='relative h-auto md:h-[800px]'
+      className='relative h-auto sm:h-auto md:h-auto lg:h-[800px]'
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
     >
-      <div className='relative md:fixed bottom-0 h-auto md:h-[800px] w-full'>
+      <div className='relative lg:fixed bottom-0 h-auto lg:h-[800px] w-full'>
         <div className="h-full w-full bg-[#1C2533] text-[#Fdfdf8] flex flex-col justify-between relative overflow-hidden">
 
           {/* 3D Background - Reduced opacity for subtle effect */}
@@ -49,10 +49,10 @@ export function Footer() {
           {/* Absolute Grid Lines */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:6rem_6rem] pointer-events-none" />
 
-          <div className="container-custom relative z-10 h-full flex flex-col pt-12 pb-10 ">
+          <div className="container-custom relative z-10 h-full flex flex-col pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 md:pb-10 px-4 sm:px-6 md:px-8">
 
             {/* Top Section: Links & Socials */}
-            <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16 md:mb-auto">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-8 sm:gap-10 md:gap-12 mb-10 sm:mb-12 md:mb-16 lg:mb-auto">
               <div className="w-full lg:w-auto flex flex-col gap-8">
                 {/* Footer Logo */}
                 {/* <div className="relative w-40 h-12 mb-2">
@@ -100,8 +100,8 @@ export function Footer() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-auto flex flex-col md:flex-row gap-12 lg:gap-24">
-                <div className="grid grid-cols-2 gap-12 md:gap-24">
+              <div className="w-full lg:w-auto flex flex-col md:flex-row gap-8 sm:gap-10 md:gap-12 lg:gap-24">
+                <div className="grid grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-24">
                   <div>
                     <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Explore</h3>
                     <ul className="space-y-4 text-lg font-medium text-white/60">
@@ -123,8 +123,8 @@ export function Footer() {
 
                 {/* Map Section */}
                 <div>
-                  <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-6">Locate Us</h3>
-                  <div className="w-full md:w-[400px] h-[220px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5 ">
+                  <h3 className="text-[#F5B301] text-sm uppercase tracking-widest font-bold mb-4 sm:mb-6">Locate Us</h3>
+                  <div className="w-full sm:w-[320px] md:w-[360px] lg:w-[400px] h-[180px] sm:h-[200px] md:h-[220px] rounded-xl overflow-hidden shadow-lg border-2 border-white/5 relative bg-white/5">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7913.527095429474!2d77.0720385!3d11.0407133!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85851693f4a5d%3A0x929165d4884224ee!2sSRI%20SHAKTHI%20INSTITUTE%20OF%20ENGINEERING%20AND%20TECHNOLOGY!5e0!3m2!1sen!2sin!4v1769852904243!5m2!1sen!2sin"
                       width="100%"
@@ -142,18 +142,18 @@ export function Footer() {
 
 
             {/* Giant Typography Section */}
-            <div className="relative mt-8 md:mt-10">
-              <div className="w-full border-t border-white/10 mb-8" />
+            <div className="relative mt-6 sm:mt-8 md:mt-10">
+              <div className="w-full border-t border-white/10 mb-4 sm:mb-6 md:mb-8" />
 
-              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-8">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 sm:gap-6 md:gap-8">
                 {/* Typography Block */}
                 <div className="w-full md:w-auto text-center md:text-left">
-                  <h1 className="font-heading font-black text-[20vw] md:text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
+                  <h1 className="font-heading font-black text-[18vw] sm:text-[16vw] md:text-[14vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 select-none">
                     KALAM
                   </h1>
-                  <div className="flex flex-col md:flex-row items-center md:items-center justify-between w-full pl-0 md:pl-8">
-                    <div className="text-[8vw] md:text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
-                    <div className="text-white/40 text-xs md:text-base max-w-md text-center md:text-right mt-2 md:mt-0 leading-relaxed hover:text-white transition-colors">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full pl-0 sm:pl-4 md:pl-8">
+                    <div className="text-[7vw] sm:text-[6vw] md:text-[5vw] font-bold text-[#F5B301] tracking-tighter">2K26</div>
+                    <div className="text-white/40 text-[10px] sm:text-xs md:text-base max-w-xs sm:max-w-sm md:max-w-md text-center sm:text-right mt-2 sm:mt-0 leading-relaxed hover:text-white transition-colors">
                       <a href="https://siet.ac.in/" target="_blank" rel="noopener noreferrer">
                         Sri Shakthi Institute of Engineering and Technology<br />
                         L&T Bypass Road, Coimbatore - 641 062
@@ -163,25 +163,25 @@ export function Footer() {
                 </div>
 
                 {/* Logo & Register CTA */}
-                <div className="w-full md:w-auto mb-4 md:mb-16 flex flex-col items-center gap-4 md:gap-6">
-                  <div className="relative w-16 h-20 md:w-32 md:h-44">
+                <div className="w-full md:w-auto mb-2 sm:mb-4 md:mb-16 flex flex-col items-center gap-3 sm:gap-4 md:gap-6">
+                  <div className="relative w-12 h-16 sm:w-16 sm:h-20 md:w-24 md:h-32 lg:w-32 lg:h-44">
                     <NextImage
-                      src="/kalam26-logo.png"
+                      src="/kalam26-logo-yellow.svg"
                       alt="Kalam 2026"
                       fill
                       className="object-contain"
                     />
                   </div>
-                  <Link href="/register" className="group flex items-center gap-2 md:gap-4 text-lg md:text-2xl font-bold bg-white text-[#1C2533] py-3 px-6 md:py-4 md:px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
+                  <Link href="/register" className="group flex items-center gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-2xl font-bold bg-white text-[#1C2533] py-2.5 px-4 sm:py-3 sm:px-5 md:py-3.5 md:px-6 lg:py-4 lg:px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
                     Register Now
-                    <ArrowUpRight className="w-5 h-5 md:w-8 md:h-8 group-hover:rotate-45 transition-transform" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 group-hover:rotate-45 transition-transform" />
                   </Link>
                 </div>
               </div>
             </div>
 
             {/* Bottom Bar */}
-            <div className="mt-8 flex justify-between text-white/30 text-sm">
+            <div className="mt-4 sm:mt-6 md:mt-8 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 text-white/30 text-xs sm:text-sm">
               <p>&copy; 2026 Kalam</p>
               <p>Designed with passion.</p>
             </div>

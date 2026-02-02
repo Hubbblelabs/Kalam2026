@@ -56,13 +56,12 @@ export function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 md:pt-6 pointer-events-none">
 
-      {/* Floating Capsule */}
       <header
         className={cn(
           "pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
           "flex items-center justify-between px-2 md:px-3 py-2",
-          "rounded-full border border-white/10 shadow-2xl shadow-black/10",
-          "backdrop-blur-3xl bg-[#1C2533]/80 supports-[backdrop-filter]:bg-[#1C2533]/80",
+          "rounded-full border border-[#F5B301]/30 shadow-2xl shadow-[#0B3C5D]/20",
+          "backdrop-blur-3xl bg-[#0B3C5D]/90 supports-[backdrop-filter]:bg-[#0B3C5D]/90",
           isHidden ? "-translate-y-[200%] opacity-0" : "translate-y-0 opacity-100",
           isScrolled ? "w-[90%] md:w-[60rem]" : "w-[95%] md:w-[70rem]"
         )}
@@ -74,7 +73,7 @@ export function Header() {
           className="ml-4 md:ml-6 relative h-8 w-28 md:w-32 hover:opacity-80 transition-opacity"
         >
           <NextImage
-            src="/kalam26-logo-hor.svg"
+            src="/kalam26-logo-hor-yellow.svg"
             alt="Kalam 2026"
             fill
             className="object-contain object-left"
@@ -92,7 +91,7 @@ export function Header() {
                 href={link.href}
                 className={cn(
                   "relative px-5 py-2 text-sm font-medium rounded-full transition-all duration-300",
-                  isActive ? "text-white bg-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] font-semibold" : "text-white/70 hover:text-white hover:bg-white/5"
+                  isActive ? "text-[#0B3C5D] bg-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] font-bold" : "text-white/80 hover:text-white hover:bg-white/10"
                 )}
               >
                 {link.label}
@@ -106,7 +105,7 @@ export function Header() {
           {/* Login Link */}
           <button
             onClick={() => openAuth('login')}
-            className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/70 hover:text-white transition-colors cursor-pointer"
+            className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/90 hover:text-white transition-colors cursor-pointer"
           >
             Login
           </button>
@@ -114,7 +113,7 @@ export function Header() {
           {/* Register CTA */}
           <button
             onClick={() => openAuth('register')}
-            className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-[#1C2533] hover:bg-[#F5B301] hover:text-[#1C2533] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)] cursor-pointer"
+            className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-[#F5B301] text-[#0B3C5D] hover:bg-white hover:text-[#0B3C5D] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)] cursor-pointer"
           >
             Register
           </button>
