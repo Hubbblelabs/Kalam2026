@@ -1,183 +1,188 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Facebook, Instagram, Linkedin, Twitter, X } from 'lucide-react';
+import { Instagram, Linkedin, Twitter } from 'lucide-react';
 
 const socialLinks = [
-    { name: 'Instagram', href: 'https://instagram.com', icon: <Instagram className="w-6 h-6" /> },
-    { name: 'Twitter', href: 'https://twitter.com', icon: <Twitter className="w-6 h-6" /> },
-    { name: 'LinkedIn', href: 'https://linkedin.com', icon: <Linkedin className="w-6 h-6" /> },
+    { name: 'Instagram', href: 'https://instagram.com', icon: <Instagram className="w-5 h-5" /> },
+    { name: 'Twitter', href: 'https://twitter.com', icon: <Twitter className="w-5 h-5" /> },
+    { name: 'LinkedIn', href: 'https://linkedin.com', icon: <Linkedin className="w-5 h-5" /> },
 ];
 
-interface NavLink {
+export interface NavLink {
     href: string;
     label: string;
 }
 
-interface MobileNavProps {
-    navLinks: NavLink[];
-}
-
-export function MobileNav({ navLinks }: MobileNavProps) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    const pathname = usePathname();
-
-    // Handle client-side mounting for portal
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    // Prevent body scroll when menu is open
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isOpen]);
-
-    const overlayContent = (
-        <div
-            className={cn(
-                "fixed inset-0 z-[100] md:hidden transition-all duration-300",
-                isOpen 
-                    ? "visible opacity-100 pointer-events-auto" 
-                    : "invisible opacity-0 pointer-events-none"
-            )}
+export function MobileToggle({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) {
+    return (
+        <button
+            onClick={onToggle}
+            className="md:hidden relative group w-12 h-12 flex items-center justify-center focus:outline-none"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
-            {/* Solid background layer to prevent content bleeding through */}
-            <div className="absolute inset-0 bg-[#0B3C5D]" />
-            {/* Background Decor */}
-            <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-[#F5B301]/10 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-20%] w-[400px] h-[400px] bg-[#1C5D99]/20 rounded-full blur-[100px] pointer-events-none" />
+            {/* Hover Background/Glow */}
+            <div className={cn(
+                "absolute inset-0 rounded-full transition-all duration-300 ease-out",
+                isOpen ? "bg-[#F5B301]/10 scale-100" : "bg-white/0 scale-75 group-hover:bg-white/10 group-hover:scale-100"
+            )} />
 
-            {/* Close Button - Inside portal for proper z-index */}
-            <button
-                onClick={() => setIsOpen(false)}
-                className="fixed top-4 right-4 z-[110] w-12 h-12 flex flex-col items-center justify-center gap-1.5"
-                aria-label="Close menu"
-            >
-                <div className="w-8 h-1 rounded-full bg-white rotate-45 translate-y-2.5 transition-all duration-300" />
-                <div className="w-8 h-1 rounded-full bg-white opacity-0 transition-all duration-300" />
-                <div className="w-8 h-1 rounded-full bg-white -rotate-45 -translate-y-2.5 transition-all duration-300" />
-            </button>
+            {/* Icon Container */}
+            <div className="w-5 h-[14px] relative z-10">
+                {/* Inner rotating container */}
+                <div className={cn(
+                    "absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isOpen ? "rotate-90" : "rotate-0"
+                )}>
+                    {/* Top span */}
+                    <span className="absolute left-0 right-0 top-0 block">
+                        {/* Top-left segment */}
+                        <span className={cn(
+                            "absolute left-0 top-0 block w-[47%] h-[2px] rounded-full origin-left transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                            isOpen 
+                                ? "bg-[#F5B301] rotate-45 translate-x-[2.2px] -translate-y-[3px] scale-x-105" 
+                                : "bg-white group-hover:bg-[#F5B301] translate-x-[1px] scale-x-110"
+                        )} />
+                        {/* Top-right segment */}
+                        <span className={cn(
+                            "absolute right-0 top-0 block w-[47%] h-[2px] rounded-full origin-right transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                            isOpen 
+                                ? "bg-[#F5B301] -rotate-45 -translate-x-[2.2px] -translate-y-[3px] scale-x-105" 
+                                : "bg-white group-hover:bg-[#F5B301] -translate-x-[1px] scale-x-110"
+                        )} />
+                    </span>
 
-            {/* Content Container */}
-            <div className="h-full w-full flex flex-col justify-between px-6 pt-24 pb-12 overflow-y-auto relative">
-                {/* Brand Logo */}
-                <div className="absolute top-6 left-6 w-32 h-10">
-                    <NextImage
-                        src="/kalam26-logo-hor-yellow.svg"
-                        alt="Kalam 2026"
-                        fill
-                        className="object-contain object-left"
-                    />
+                    {/* Bottom span */}
+                    <span className="absolute left-0 right-0 bottom-0 block">
+                        {/* Bottom-left segment */}
+                        <span className={cn(
+                            "absolute left-0 bottom-0 block w-[47%] h-[2px] rounded-full origin-left transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                            isOpen 
+                                ? "bg-[#F5B301] -rotate-45 translate-x-[2.2px] translate-y-[3px] scale-x-105" 
+                                : "bg-white group-hover:bg-[#F5B301] translate-x-[1px] scale-x-110"
+                        )} />
+                        {/* Bottom-right segment */}
+                        <span className={cn(
+                            "absolute right-0 bottom-0 block w-[47%] h-[2px] rounded-full origin-right transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                            isOpen 
+                                ? "bg-[#F5B301] rotate-45 -translate-x-[2.2px] translate-y-[3px] scale-x-105" 
+                                : "bg-white group-hover:bg-[#F5B301] -translate-x-[1px] scale-x-110"
+                        )} />
+                    </span>
                 </div>
 
-                {/* Navigation - GIANT TYPOGRAPHY */}
-                <nav className="flex flex-col gap-6">
-                    {navLinks.map((link, index) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setIsOpen(false)}
-                                className={cn(
-                                    "font-heading font-black text-5xl sm:text-6xl tracking-tight transition-all duration-500 transform uppercase",
-                                    isActive ? "text-[#F5B301]" : "text-white/40 hover:text-[#F5B301]",
-                                    isOpen ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
-                                )}
-                                style={{ transitionDelay: `${100 + (index * 50)}ms` }}
-                            >
-                                {link.label}
-                                {isActive && <span className="inline-block ml-4 w-3 h-3 rounded-full bg-[#F5B301] align-middle animate-pulse" />}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Bottom Section: Auth & Social */}
-                <div
+                {/* Left circular arc SVG */}
+                <svg
+                    viewBox="0 0 44 44"
                     className={cn(
-                        "flex flex-col gap-8 transition-all duration-700 transform",
-                        isOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                        "absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] w-11 h-11",
+                        "fill-none stroke-2 stroke-white group-hover:stroke-[#F5B301] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                        isOpen && "!stroke-[#F5B301]"
                     )}
-                    style={{ transitionDelay: '300ms' }}
+                    style={{
+                        strokeLinecap: 'round',
+                        strokeDasharray: isOpen ? '0 82.801 62 82.801' : '0 82.801 8 82.801',
+                        strokeDashoffset: isOpen ? '62' : '82.801',
+                        transform: isOpen ? 'scale(1) rotate(90deg)' : 'scale(1) rotate(0deg)',
+                    }}
                 >
-                    {/* Auth Grid */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <Link
-                            href="/login"
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center justify-center py-4 rounded-full border border-white/10 text-white font-bold text-lg hover:bg-white/5 transition-colors"
-                        >
-                            Login
-                        </Link>
-                        <Link
-                            href="/register"
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center justify-center py-4 rounded-full bg-[#F5B301] text-[#0B3C5D] font-bold text-lg hover:bg-white hover:text-[#0B3C5D] transition-all shadow-lg shadow-[#F5B301]/20"
-                        >
-                            Register
-                        </Link>
-                    </div>
+                    <path d="M22,22 L2,22 C2,11 11,2 22,2 C33,2 42,11 42,22" />
+                </svg>
 
-                    {/* Social Links */}
-                    <div className="flex justify-between items-center pt-8 border-t border-white/5">
-                        <span className="text-white/30 font-medium text-sm tracking-widest uppercase">Follow Us</span>
-                        <div className="flex gap-4">
-                            {socialLinks.map((social) => (
-                                <a
-                                    key={social.name}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:text-white hover:bg-[#1C5D99] transition-all"
-                                >
-                                    {social.icon}
-                                </a>
-                            ))}
-                        </div>
+                {/* Right circular arc SVG */}
+                <svg
+                    viewBox="0 0 44 44"
+                    className={cn(
+                        "absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] w-11 h-11",
+                        "fill-none stroke-2 stroke-white group-hover:stroke-[#F5B301] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                        isOpen && "!stroke-[#F5B301]"
+                    )}
+                    style={{
+                        strokeLinecap: 'round',
+                        strokeDasharray: isOpen ? '0 82.801 62 82.801' : '0 82.801 8 82.801',
+                        strokeDashoffset: isOpen ? '62' : '82.801',
+                        transform: isOpen ? 'scale(1) rotate(270deg)' : 'scale(1) rotate(180deg)',
+                    }}
+                >
+                    <path d="M22,22 L2,22 C2,11 11,2 22,2 C33,2 42,11 42,22" />
+                </svg>
+            </div>
+        </button>
+    );
+}
+
+export function MobileMenu({ isOpen, navLinks, onClose }: { isOpen: boolean; navLinks: NavLink[]; onClose: () => void }) {
+    const pathname = usePathname();
+
+    return (
+        <div className="flex flex-col px-6 pb-8 pt-4 gap-8">
+            <nav className="flex flex-col gap-4">
+                {navLinks.map((link, index) => {
+                    const isActive = pathname === link.href;
+                    return (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={onClose}
+                            className={cn(
+                                "text-3xl font-bold transition-all duration-300 transform block text-center",
+                                isActive ? "text-[#F5B301]" : "text-white/80 hover:text-white hover:translate-x-2",
+                                isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+                            )}
+                            style={{ transitionDelay: `${index * 50}ms` }}
+                        >
+                            {link.label}
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            {/* Auth & Social */}
+            <div
+                className={cn(
+                    "flex flex-col gap-6 transition-all duration-500",
+                    isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                )}
+                style={{ transitionDelay: '200ms' }}
+            >
+                <div className="h-px w-full bg-white/10" />
+                
+                <div className="grid grid-cols-2 gap-3">
+                    <Link
+                        href="/login"
+                        onClick={onClose}
+                        className="flex items-center justify-center py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors"
+                    >
+                        Login
+                    </Link>
+                    <Link
+                        href="/register"
+                        onClick={onClose}
+                        className="flex items-center justify-center py-3 rounded-xl bg-[#F5B301] text-[#0B3C5D] font-bold hover:bg-white hover:text-[#0B3C5D] transition-all"
+                    >
+                        Register
+                    </Link>
+                </div>
+
+                <div className="flex justify-between items-center">
+                    <span className="text-white/40 text-sm font-medium uppercase tracking-wider">Follow Us</span>
+                    <div className="flex gap-4">
+                        {socialLinks.map((social) => (
+                            <a
+                                key={social.name}
+                                href={social.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 hover:text-[#F5B301] transition-all"
+                            >
+                                {social.icon}
+                            </a>
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
-    );
-
-    return (
-        <>
-            {/* Animated Hamburger Button - stays in header */}
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 transition-all duration-300"
-                aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            >
-                <div className={cn(
-                    "w-8 h-1 rounded-full transition-all duration-300 transform origin-center",
-                    isOpen ? "rotate-45 translate-y-2.5 bg-white" : "bg-[#F5B301]"
-                )} />
-                <div className={cn(
-                    "w-8 h-1 rounded-full transition-all duration-300",
-                    isOpen ? "opacity-0" : "bg-[#F5B301]"
-                )} />
-                <div className={cn(
-                    "w-8 h-1 rounded-full transition-all duration-300 transform origin-center",
-                    isOpen ? "-rotate-45 -translate-y-2.5 bg-white" : "bg-[#F5B301]"
-                )} />
-            </button>
-
-            {/* Portal the overlay to document.body to escape header's stacking context */}
-            {mounted && createPortal(overlayContent, document.body)}
-        </>
     );
 }

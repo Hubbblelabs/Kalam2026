@@ -10,6 +10,8 @@ import { userRoutes } from './routes/user.routes.js';
 import { eventRoutes } from './routes/event.routes.js';
 import { paymentRoutes } from './routes/payment.routes.js';
 import { healthRoutes } from './routes/health.routes.js';
+import { cartRoutes } from './routes/cart.routes.js';
+import { orderRoutes } from './routes/order.routes.js';
 
 const app = Fastify({
   logger: {
@@ -54,6 +56,8 @@ await app.register(authRoutes, { prefix: '/api/auth' });
 await app.register(userRoutes, { prefix: '/api/users' });
 await app.register(eventRoutes, { prefix: '/api/events' });
 await app.register(paymentRoutes, { prefix: '/api/payments' });
+await app.register(cartRoutes, { prefix: '/api/cart' });
+await app.register(orderRoutes, { prefix: '/api/orders' });
 
 // ===========================================
 // Error Handler

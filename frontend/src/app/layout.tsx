@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { AuthProvider } from '@/context/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -62,6 +63,7 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
           {children}
+          <BottomNav />
           <AuthModal />
         </AuthProvider>
       </body>

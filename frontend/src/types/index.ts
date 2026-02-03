@@ -37,6 +37,38 @@ export interface Payment {
   status: 'pending' | 'success' | 'failed' | 'refunded';
 }
 
+export interface CartItem {
+  event: Event;
+  addedAt: string;
+}
+
+export interface Cart {
+  id: string;
+  user: string;
+  items: CartItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderItem {
+  event: Event;
+  eventTitle: string;
+  eventDate: string;
+  price: number;
+}
+
+export interface Order {
+  id: string;
+  user: string;
+  orderNumber: string;
+  items: OrderItem[];
+  totalAmount: number;
+  payment?: Payment;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'refunded';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

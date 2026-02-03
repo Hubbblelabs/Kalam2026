@@ -19,43 +19,10 @@ interface CategoryShowcaseProps {
 
 export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
     const [activeindex, setActiveIndex] = useState<number>(0);
-    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    useEffect(() => {
-        const observerCallback = (entries: IntersectionObserverEntry[]) => {
-            const visibleEntry = entries.reduce((max, entry) =>
-                entry.intersectionRatio > max.intersectionRatio ? entry : max,
-                entries[0]);
+    // Intersection Observer removed to prevent auto-expansion on scroll (user request: expand only on click)
 
-            if (visibleEntry && visibleEntry.isIntersecting && visibleEntry.intersectionRatio > 0.6) {
-                const index = cardRefs.current.indexOf(visibleEntry.target as HTMLDivElement);
-
-                if (index !== -1 && index !== activeindex) {
-                    // Clear existing timeout
-                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-                    // Set new timeout to debounce the switch
-                    timeoutRef.current = setTimeout(() => {
-                        setActiveIndex(index);
-                    }, 300); // 300ms delay to ensure user stopped scrolling or focused
-                }
-            }
-        };
-
-        const observer = new IntersectionObserver(observerCallback, {
-            root: null,
-            rootMargin: '-20% 0px -20% 0px', // Trigger when element is central
-            threshold: 0.6 // Require 60% visibility
-        });
-
-        cardRefs.current.forEach((ref) => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => observer.disconnect();
-    }, []);
 
     const colorMap = {
         blue: {
@@ -76,7 +43,7 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-4 h-[800px] lg:h-[500px] w-full transition-all duration-500">
+        <div className="flex flex-col lg:flex-row gap-4 h-[850px] lg:h-[500px] w-full transition-all duration-500">
             {categories.map((category, index) => {
                 const isActive = activeindex === index;
                 const colors = colorMap[category.accentColor];
@@ -84,12 +51,12 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                 return (
                     <div
                         key={index}
-                        ref={(el) => { cardRefs.current[index] = el; }}
+
                         className={cn(
                             "relative flex-1 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group border border-black/5",
                             isActive ? "flex-[3] lg:flex-[4]" : "hover:flex-[1.2]"
                         )}
-                        onMouseEnter={() => setActiveIndex(index)}
+                        onMouseEnter={() => window.innerWidth >= 1024 && setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
                     >
                         {/* Background Image / Gradient */}
@@ -103,10 +70,10 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                         <div className="absolute inset-0 bg-white -z-10" />
 
                         {/* Content Container */}
-                        <div className="relative h-full flex flex-col p-6 lg:p-10 justify-between">
+                        <div className="relative h-full flex flex-col p-6 lg:p-10 justify-start lg:justify-between">
 
                             {/* Header: Icon & Title */}
-                            <div className="flex flex-col gap-4">
+                            <div className={cn("flex flex-col transition-all duration-500", isActive ? "gap-4" : "gap-1")}>
                                 <div className={cn(
                                     "w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500",
                                     isActive ? cn(colors.bg, "text-white scale-110") : "bg-black/5 text-black/40 group-hover:bg-black/10"
@@ -130,22 +97,22 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
 
                             {/* Expanded Content */}
                             <div className={cn(
-                                "space-y-6 transition-all duration-500",
-                                isActive ? "opacity-100 translate-y-0 delay-150" : "opacity-0 translate-y-4 pointer-events-none absolute bottom-0 left-0 right-0 p-6"
+                                "space-y-6 transition-opacity duration-500 mt-4 lg:mt-0",
+                                isActive ? "opacity-100 relative" : "opacity-0 absolute bottom-0 left-0 right-0 p-6 lg:p-10 pointer-events-none"
                             )}>
-                                <p className="text-lg text-[#6B7B8C] leading-relaxed max-w-md">
+                                <p className="text-base lg:text-lg text-[#6B7B8C] leading-relaxed max-w-md">
                                     {category.description}
                                 </p>
 
                                 <Link
                                     href={category.href}
                                     className={cn(
-                                        "inline-flex items-center gap-3 px-6 py-3 rounded-full font-bold text-white transition-all hover:gap-4",
+                                        "inline-flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 rounded-full font-bold text-white transition-all hover:gap-3 sm:hover:gap-4 whitespace-nowrap text-sm sm:text-base w-fit",
                                         colors.bg
                                     )}
                                 >
                                     Explore {category.title}
-                                    <ArrowUpRight className="w-5 h-5" />
+                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                                 </Link>
                             </div>
 

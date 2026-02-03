@@ -90,3 +90,53 @@ export const userApi = {
 
   getRegistrations: (token: string) => fetchApi('/users/me/registrations', { token }),
 };
+
+// Cart API
+export const cartApi = {
+  getCart: (token: string) => fetchApi('/cart', { token }),
+
+  addToCart: (eventId: string, token: string) =>
+    fetchApi('/cart', {
+      method: 'POST',
+      body: JSON.stringify({ eventId }),
+      token,
+    }),
+
+  removeFromCart: (eventId: string, token: string) =>
+    fetchApi(`/cart/${eventId}`, {
+      method: 'DELETE',
+      token,
+    }),
+
+  clearCart: (token: string) =>
+    fetchApi('/cart', {
+      method: 'DELETE',
+      token,
+    }),
+};
+
+// Order API
+export const orderApi = {
+  createOrder: (token: string) =>
+    fetchApi('/orders', {
+      method: 'POST',
+      token,
+    }),
+
+  getUserOrders: (token: string) => fetchApi('/orders', { token }),
+
+  getOrder: (orderId: string, token: string) => fetchApi(`/orders/${orderId}`, { token }),
+
+  cancelOrder: (orderId: string, token: string) =>
+    fetchApi(`/orders/${orderId}/cancel`, {
+      method: 'PATCH',
+      token,
+    }),
+
+  confirmOrder: (orderId: string, paymentId: string, token: string) =>
+    fetchApi('/orders/confirm', {
+      method: 'POST',
+      body: JSON.stringify({ orderId, paymentId }),
+      token,
+    }),
+};
