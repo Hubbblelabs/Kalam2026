@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { cartApi, orderApi } from '@/lib/api';
-import { Cart, Event } from '@/types';
+import { Cart } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2, ShoppingBag, Calendar, MapPin, Package } from 'lucide-react';
@@ -29,6 +29,9 @@ export default function CartPage() {
       }
 
       const response = await cartApi.getCart(token);
+      if (!response.data) {
+        throw new Error('Cart data missing');
+      }
       setCart(response.data);
     } catch (error) {
       console.error('Failed to fetch cart:', error);
@@ -70,7 +73,7 @@ export default function CartPage() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
 
-      const response = await orderApi.createOrder(token);
+      await orderApi.createOrder(token);
       router.push(`/orders`);
     } catch (error) {
       console.error('Failed to create order:', error);

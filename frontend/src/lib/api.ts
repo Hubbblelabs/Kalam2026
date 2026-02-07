@@ -1,3 +1,5 @@
+import type { ApiResponse, Cart, Order, User } from '@/types';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 interface FetchOptions extends RequestInit {
@@ -79,7 +81,7 @@ export const paymentsApi = {
 
 // User API
 export const userApi = {
-  getProfile: (token: string) => fetchApi('/users/me', { token }),
+  getProfile: (token: string) => fetchApi<ApiResponse<User>>('/users/me', { token }),
 
   updateProfile: (data: Partial<{ name: string; phone: string }>, token: string) =>
     fetchApi('/users/me', {
@@ -93,7 +95,7 @@ export const userApi = {
 
 // Cart API
 export const cartApi = {
-  getCart: (token: string) => fetchApi('/cart', { token }),
+  getCart: (token: string) => fetchApi<ApiResponse<Cart>>('/cart', { token }),
 
   addToCart: (eventId: string, token: string) =>
     fetchApi('/cart', {
@@ -118,23 +120,23 @@ export const cartApi = {
 // Order API
 export const orderApi = {
   createOrder: (token: string) =>
-    fetchApi('/orders', {
+    fetchApi<ApiResponse<Order>>('/orders', {
       method: 'POST',
       token,
     }),
 
-  getUserOrders: (token: string) => fetchApi('/orders', { token }),
+  getUserOrders: (token: string) => fetchApi<ApiResponse<Order[]>>('/orders', { token }),
 
-  getOrder: (orderId: string, token: string) => fetchApi(`/orders/${orderId}`, { token }),
+  getOrder: (orderId: string, token: string) => fetchApi<ApiResponse<Order>>(`/orders/${orderId}`, { token }),
 
   cancelOrder: (orderId: string, token: string) =>
-    fetchApi(`/orders/${orderId}/cancel`, {
+    fetchApi<ApiResponse<Order>>(`/orders/${orderId}/cancel`, {
       method: 'PATCH',
       token,
     }),
 
   confirmOrder: (orderId: string, paymentId: string, token: string) =>
-    fetchApi('/orders/confirm', {
+    fetchApi<ApiResponse<Order>>('/orders/confirm', {
       method: 'POST',
       body: JSON.stringify({ orderId, paymentId }),
       token,

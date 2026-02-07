@@ -8,8 +8,15 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User as UserIcon, Mail, Phone, Shield, LogOut } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import {
+  User as UserIcon,
+  Mail,
+  Phone,
+  Shield,
+  LogOut,
+  Package,
+  ShoppingCart,
+} from 'lucide-react';
 
 export default function AccountPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -32,6 +39,9 @@ export default function AccountPage() {
       }
 
       const response = await userApi.getProfile(token);
+      if (!response.data) {
+        throw new Error('Profile data missing');
+      }
       setUser(response.data);
       setFormData({
         name: response.data.name || '',
