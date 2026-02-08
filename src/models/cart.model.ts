@@ -1,31 +1,17 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface ICartItem {
+interface ICartItem {
   event: mongoose.Types.ObjectId;
-  addedAt: Date;
+  price: number;
 }
 
 export interface ICart extends Document {
   user: mongoose.Types.ObjectId;
   items: ICartItem[];
+  totalAmount: number;
   createdAt: Date;
   updatedAt: Date;
 }
-
-const cartItemSchema = new Schema<ICartItem>(
-  {
-    event: {
-      type: Schema.Types.ObjectId,
-      ref: 'Event',
-      required: true,
-    },
-    addedAt: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  { _id: false }
-);
 
 const cartSchema = new Schema<ICart>(
   {
@@ -33,16 +19,33 @@ const cartSchema = new Schema<ICart>(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      unique: true,
+      unique: true, // One active cart per user
     },
-    items: [cartItemSchema],
+    items: [
+      {
+        event: {
+          type: Schema.Types.ObjectId,
+          ref: 'Event',
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    totalAmount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Index for faster user lookups
-cartSchema.index({ user: 1 });
+// Indexes
+cartSchema.index({ user: 1 }, { unique: true });
+cartSchema.index({ updatedAt: -1 });
 
-export default mongoose.models.Cart || mongoose.model<ICart>('Cart', cartSchema);
+export const Cart = mongoose.models.Cart || mongoose.model<ICart>('Cart', cartSchema);

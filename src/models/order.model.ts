@@ -1,46 +1,20 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IOrderItem {
+interface IOrderItem {
   event: mongoose.Types.ObjectId;
-  eventTitle: string;
-  eventDate: Date;
-  price: number;
+  amount: number;
 }
 
 export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
-  orderNumber: string;
   items: IOrderItem[];
+  entryFee?: number;
   totalAmount: number;
-  payment: mongoose.Types.ObjectId;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'refunded';
+  status: 'CREATED' | 'PAID' | 'FAILED' | 'CANCELLED';
+  payment?: mongoose.Types.ObjectId;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date; // implicit
 }
-
-const orderItemSchema = new Schema<IOrderItem>(
-  {
-    event: {
-      type: Schema.Types.ObjectId,
-      ref: 'Event',
-      required: true,
-    },
-    eventTitle: {
-      type: String,
-      required: true,
-    },
-    eventDate: {
-      type: Date,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  },
-  { _id: false }
-);
 
 const orderSchema = new Schema<IOrder>(
   {
@@ -48,36 +22,48 @@ const orderSchema = new Schema<IOrder>(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      unique: true,
     },
-    orderNumber: {
-      type: String,
-      required: true,
-      unique: true,
+    items: [
+      {
+        event: {
+          type: Schema.Types.ObjectId,
+          ref: 'Event',
+          required: true,
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    entryFee: {
+      type: Number,
+      default: 0,
     },
-    items: [orderItemSchema],
     totalAmount: {
       type: Number,
       required: true,
-      min: 0,
+    },
+    status: {
+      type: String,
+      enum: ['CREATED', 'PAID', 'FAILED', 'CANCELLED'],
+      default: 'CREATED',
     },
     payment: {
       type: Schema.Types.ObjectId,
       ref: 'Payment',
     },
-    status: {
-      type: String,
-      enum: ['pending', 'confirmed', 'cancelled', 'refunded'],
-      default: 'pending',
-    },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: true, updatedAt: false }, // schema says createdAt only? keeping standard timestamps probably safer but schema says createdAt
   }
 );
 
 // Indexes
-orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ orderNumber: 1 });
+orderSchema.index({ user: 1 });
+orderSchema.index({ payment: 1 });
+orderSchema.index({ status: 1 });
+orderSchema.index({ createdAt: -1 });
+orderSchema.index({ totalAmount: 1 });
 
-export default mongoose.models.Order || mongoose.model<IOrder>('Order', orderSchema);
+export const Order = mongoose.models.Order || mongoose.model<IOrder>('Order', orderSchema);

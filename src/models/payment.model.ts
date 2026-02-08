@@ -2,15 +2,16 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPayment extends Document {
   user: mongoose.Types.ObjectId;
-  event: mongoose.Types.ObjectId;
-  transactionId: string;
-  merchantTransactionId: string;
+  order: mongoose.Types.ObjectId;
+  gateway: 'razorpay' | 'cashfree' | 'phonepe';
+  gatewayOrderId?: string;
+  gatewayPaymentId?: string;
   amount: number;
-  status: 'pending' | 'success' | 'failed' | 'refunded';
-  paymentMethod?: string;
-  providerResponse?: Record<string, unknown>;
-  createdAt: Date;
-  updatedAt: Date;
+  currency: 'INR';
+  status: 'CREATED' | 'SUCCESS' | 'FAILED' | 'REFUNDED';
+  rawResponse?: any;
+  initiatedAt: Date;
+  completedAt?: Date;
 }
 
 const paymentSchema = new Schema<IPayment>(
@@ -20,46 +21,58 @@ const paymentSchema = new Schema<IPayment>(
       ref: 'User',
       required: true,
     },
-    event: {
+    order: {
       type: Schema.Types.ObjectId,
-      ref: 'Event',
-      required: true,
-    },
-    transactionId: {
-      type: String,
+      ref: 'Order',
       required: true,
       unique: true,
     },
-    merchantTransactionId: {
+    gateway: {
       type: String,
+      enum: ['razorpay', 'cashfree', 'phonepe'],
       required: true,
-      unique: true,
+    },
+    gatewayOrderId: {
+      type: String,
+    },
+    gatewayPaymentId: {
+      type: String,
     },
     amount: {
       type: Number,
       required: true,
-      min: 0,
+    },
+    currency: {
+      type: String,
+      default: 'INR',
     },
     status: {
       type: String,
-      enum: ['pending', 'success', 'failed', 'refunded'],
-      default: 'pending',
+      enum: ['CREATED', 'SUCCESS', 'FAILED', 'REFUNDED'],
+      default: 'CREATED',
     },
-    paymentMethod: {
-      type: String,
-    },
-    providerResponse: {
+    rawResponse: {
       type: Schema.Types.Mixed,
+    },
+    initiatedAt: {
+      type: Date,
+      default: Date.now,
+    },
+    completedAt: {
+      type: Date,
     },
   },
   {
-    timestamps: true,
+    timestamps: false, // using initiatedAt/completedAt
   }
 );
 
 // Indexes
-paymentSchema.index({ transactionId: 1 });
-paymentSchema.index({ merchantTransactionId: 1 });
-paymentSchema.index({ user: 1, status: 1 });
+paymentSchema.index({ order: 1 }, { unique: true });
+paymentSchema.index({ gatewayOrderId: 1 });
+paymentSchema.index({ gatewayPaymentId: 1 });
+paymentSchema.index({ user: 1 });
+paymentSchema.index({ status: 1 });
+paymentSchema.index({ amount: 1 });
 
 export const Payment = mongoose.models.Payment || mongoose.model<IPayment>('Payment', paymentSchema);

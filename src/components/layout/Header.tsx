@@ -5,7 +5,7 @@ import Link from 'next/link';
 import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/context/AuthContext';
+
 import { ShoppingCart, Package } from 'lucide-react';
 
 const navLinks = [
@@ -27,7 +27,7 @@ export function Header() {
 
   const pathname = usePathname();
   const lastScrollY = useRef(0);
-  const { openAuth } = useAuth();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +57,8 @@ export function Header() {
       window.removeEventListener('footer-visibility-change', handleFooterVisibility as EventListener);
     };
   }, []);
+
+  if (pathname === '/login' || pathname === '/register') return null;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 md:pt-4 pointer-events-none">
@@ -140,14 +142,14 @@ export function Header() {
 
           {/* Auth Buttons */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => openAuth('login')}
+            <Link
+              href="/login"
               className="hidden sm:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
               Login
-            </button>
-            <button
-              onClick={() => openAuth('register')}
+            </Link>
+            <Link
+              href="/register"
               className={cn(
                 "px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
                 "text-xs sm:text-sm",
@@ -156,7 +158,7 @@ export function Header() {
               )}
             >
               Register
-            </button>
+            </Link>
           </div>
         </div>
       </header>

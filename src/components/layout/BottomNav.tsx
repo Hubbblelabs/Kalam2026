@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ShoppingCart, Package, Calendar, Home, Instagram, Linkedin, Twitter, MoreHorizontal } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -34,7 +34,7 @@ export function BottomNav() {
   const [dragStartY, setDragStartY] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const { openAuth } = useAuth();
+
 
   useEffect(() => {
     if (isMoreOpen) {
@@ -65,6 +65,8 @@ export function BottomNav() {
   };
 
 
+
+  if (pathname === '/login' || pathname === '/register') return null;
 
   return (
     <>
@@ -150,24 +152,24 @@ export function BottomNav() {
                 {/* Auth Buttons */}
                 <div className="pb-6">
                   <div className="grid grid-cols-2 gap-3">
-                    <button
+                    <Link
+                      href="/login"
                       onClick={() => {
                         setIsMoreOpen(false);
-                        openAuth('login');
                       }}
-                      className="py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors"
+                      className="py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors flex items-center justify-center"
                     >
                       Login
-                    </button>
-                    <button
+                    </Link>
+                    <Link
+                      href="/register"
                       onClick={() => {
                         setIsMoreOpen(false);
-                        openAuth('register');
                       }}
-                      className="py-3 rounded-xl bg-[#F5B301] text-[#0B3C5D] font-bold hover:bg-white transition-all"
+                      className="py-3 rounded-xl bg-[#F5B301] text-[#0B3C5D] font-bold hover:bg-white transition-all flex items-center justify-center"
                     >
                       Register
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

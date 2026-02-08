@@ -3,10 +3,11 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IUser extends Document {
   name: string;
   email: string;
-  password: string;
   phone?: string;
-  role: 'user' | 'admin';
-  isVerified: boolean;
+  college?: string;
+  department?: string;
+  passwordHash?: string;
+  hasPaidEntryFee: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,8 +18,6 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
     },
     email: {
       type: String,
@@ -27,21 +26,22 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-    },
     phone: {
       type: String,
+      unique: true,
+      sparse: true, // Allows null/undefined to be unique
       trim: true,
     },
-    role: {
+    college: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
     },
-    isVerified: {
+    department: {
+      type: String,
+    },
+    passwordHash: {
+      type: String,
+    },
+    hasPaidEntryFee: {
       type: Boolean,
       default: false,
     },
@@ -51,5 +51,11 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-// Check if model already exists to prevent overwrite error in hot-reload
+// Indexes
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ phone: 1 }, { unique: true, sparse: true });
+userSchema.index({ college: 1 });
+userSchema.index({ department: 1 });
+userSchema.index({ hasPaidEntryFee: 1 });
+
 export const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);

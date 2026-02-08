@@ -1,73 +1,99 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+interface IEventSchedule {
+  startDate?: Date;
+  startTime?: string;
+  endDate?: Date;
+  endTime?: string;
+}
+
+interface IEventFee {
+  amount?: number;
+  description?: string;
+}
+
+interface IEventContact {
+  phone?: string;
+  email?: string;
+}
+
 export interface IEvent extends Document {
-  title: string;
-  description: string;
-  category: string;
-  date: Date;
-  venue: string;
-  maxParticipants: number;
-  currentParticipants: number;
-  registrationFee: number;
-  rules: string[];
-  isActive: boolean;
-  createdBy: mongoose.Types.ObjectId;
+  name: string;
+  slug: string;
+  shortDetail?: string;
+  description?: string;
+  category: mongoose.Types.ObjectId;
+  department?: mongoose.Types.ObjectId;
+  schedule?: IEventSchedule;
+  venue?: string;
+  fee?: IEventFee;
+  bannerImage?: string;
+  contact?: IEventContact;
+  requiresTeam: boolean;
+  minTeamSize?: number;
+  maxTeamSize?: number;
+  createdBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const eventSchema = new Schema<IEvent>(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 200,
-    },
-    description: {
+    name: {
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    shortDetail: String,
+    description: String,
     category: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    date: {
-      type: Date,
+      type: Schema.Types.ObjectId,
+      ref: 'EventCategory',
       required: true,
     },
-    venue: {
-      type: String,
-      required: true,
-      trim: true,
+    department: {
+      type: Schema.Types.ObjectId,
+      ref: 'Department',
     },
-    maxParticipants: {
-      type: Number,
-      required: true,
-      min: 1,
+    schedule: {
+      startDate: Date,
+      startTime: String,
+      endDate: Date,
+      endTime: String,
     },
-    currentParticipants: {
-      type: Number,
-      default: 0,
+    venue: String,
+    fee: {
+      amount: Number,
+      description: String,
     },
-    registrationFee: {
-      type: Number,
-      required: true,
-      min: 0,
+    bannerImage: String,
+    contact: {
+      phone: String,
+      email: String,
     },
-    rules: [{
-      type: String,
-    }],
-    isActive: {
+    requiresTeam: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    minTeamSize: {
+      type: Number,
+      required: function (this: IEvent) {
+        return this.requiresTeam === true;
+      },
+    },
+    maxTeamSize: {
+      type: Number,
+      required: function (this: IEvent) {
+        return this.requiresTeam === true;
+      },
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      ref: 'Admin',
     },
   },
   {
@@ -76,8 +102,15 @@ const eventSchema = new Schema<IEvent>(
 );
 
 // Indexes
+eventSchema.index({ slug: 1 }, { unique: true });
 eventSchema.index({ category: 1 });
-eventSchema.index({ date: 1 });
-eventSchema.index({ isActive: 1 });
+eventSchema.index({ department: 1 });
+eventSchema.index({ 'schedule.startDate': 1 });
+eventSchema.index({ createdAt: -1 });
+eventSchema.index({
+  name: 'text',
+  shortDetail: 'text',
+  description: 'text',
+});
 
 export const Event = mongoose.models.Event || mongoose.model<IEvent>('Event', eventSchema);

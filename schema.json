@@ -1,0 +1,301 @@
+users {
+  _id: ObjectId,
+  name: String,
+  email: { type: String, unique: true },
+  phone: { type: String, unique: true },
+  college: String,
+  department: String,
+  passwordHash: String,
+  hasPaidEntryFee: {
+    type: Boolean,
+    default: false
+  },
+  createdAt,
+  updatedAt
+}
+
+admins {
+  _id: ObjectId,
+  name: String,
+  email: String,
+  phone: String,
+  passwordHash: String,
+  department: {
+    type: ObjectId,
+    ref: "departments",
+    required: function () {
+      return this.role !== "superadmin";
+    },
+    default: null
+  },
+  role: {
+    type: String,
+    enum: ["superadmin", "department_admin", "event_admin"],
+    required: true
+  },
+  createdAt
+}
+
+departments {
+  _id: ObjectId,
+  code: Number,        // 104, 205, etc
+  name: String,
+  category: String,    // Engineering, Culturals, etc
+}
+
+event_categories {
+  _id: ObjectId,
+  name: String,              // "Technical", "Workshop"
+  slug: String,
+}
+
+
+events {
+  _id: ObjectId,
+  name: String,
+  slug: String,
+  shortDetail: String,
+  description: String,
+  category: {
+    type: ObjectId,
+    ref: "event_categories",
+    required: true
+  },
+  department: ObjectId, // ref departments
+  schedule: {
+    startDate: Date,
+    startTime: String,
+    endDate: Date,
+    endTime: String
+  },
+  venue: String,
+  fee: {
+    amount: Number,
+    description: String,
+  },
+  bannerImage: String,
+  contact: {
+    phone: String,
+    email: String
+  },
+  requiresTeam: Boolean,
+  minTeamSize: {
+    type: Number,
+    required: function () {
+        return this.requiresTeam === true;
+    }
+  },
+  maxTeamSize: {
+    type: Number,
+    required: function () {
+        return this.requiresTeam === true;
+    }
+  },
+  createdBy: ObjectId, // admin
+  createdAt,
+  updatedAt
+}
+
+carts {
+  _id: ObjectId,
+  user: ObjectId,
+  items: [
+    {
+      event: ObjectId,
+      price: Number
+    }
+  ],
+  totalAmount: Number,
+  createdAt,
+  updatedAt
+}
+
+orders {
+  _id: ObjectId,
+  user: ObjectId,
+  items: [
+    {
+      event: ObjectId,
+      amount: Number
+    }
+  ],
+  entryFee: Number,
+  totalAmount: Number,
+  status: {
+    type: String,
+    enum: ["CREATED", "PAID", "FAILED", "CANCELLED"]
+  },
+  payment: ObjectId, // ref payments
+  createdAt
+}
+
+
+payments {
+  _id: ObjectId,
+  user: ObjectId,
+  order: ObjectId,
+  gateway: "razorpay" | "cashfree" | "phonepe",
+  gatewayOrderId: String,
+  gatewayPaymentId: String,
+  amount: Number,
+  currency: "INR",
+  status: "CREATED" | "SUCCESS" | "FAILED" | "REFUNDED",
+  rawResponse: Object, // webhook payload
+  initiatedAt,
+  completedAt
+}
+
+teams {
+  _id: ObjectId,
+  event: ObjectId,
+  name: String,
+  leader: ObjectId,
+  members: [
+    {
+      user: ObjectId,
+      joinedAt: Date
+    }
+  ],
+
+  submission: {
+    title: String,
+    problemStatement: String,
+    projectFileUrl: String
+  },
+  createdAt
+}
+
+password_resets {
+  _id: ObjectId,
+  email: String,
+  token: String,
+  expiresAt: Date
+}
+
+
+
+// Unique identity
+db.users.createIndex({ email: 1 }, { unique: true });
+db.users.createIndex({ phone: 1 }, { unique: true });
+
+// Optional filtering / analytics
+db.users.createIndex({ college: 1 });
+db.users.createIndex({ department: 1 });
+
+// Entry-fee logic queries
+db.users.createIndex({ hasPaidEntryFee: 1 });
+
+
+// Admin login
+db.admins.createIndex({ email: 1 }, { unique: true });
+
+// RBAC & dashboards
+db.admins.createIndex({ role: 1 });
+db.admins.createIndex({ department: 1 });
+
+// Prevent duplicate admins per department + role (except superadmin)
+db.admins.createIndex(
+  { department: 1, role: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { department: { $ne: null } }
+  }
+);
+
+
+// Stable internal identifier
+db.departments.createIndex({ code: 1 }, { unique: true });
+
+// Optional filtering
+db.departments.createIndex({ name: 1 });
+db.departments.createIndex({ category: 1 });
+
+
+
+
+// URL-safe unique identifier
+db.event_categories.createIndex({ slug: 1 }, { unique: true });
+
+// Optional admin search
+db.event_categories.createIndex({ name: 1 });
+
+
+
+// Public URLs
+db.events.createIndex({ slug: 1 }, { unique: true });
+
+// Core filters
+db.events.createIndex({ category: 1 });
+db.events.createIndex({ department: 1 });
+
+// Calendar & listing
+db.events.createIndex({ "schedule.startDate": 1 });
+db.events.createIndex({ createdAt: -1 });
+
+// Optional full-text search
+db.events.createIndex({
+  name: "text",
+  shortDetail: "text",
+  description: "text"
+});
+
+
+// One active cart per user
+db.carts.createIndex({ user: 1 }, { unique: true });
+
+// Cleanup / recent activity
+db.carts.createIndex({ updatedAt: -1 });
+
+
+
+
+// User order history
+db.orders.createIndex({ user: 1 });
+
+// Payment linking
+db.orders.createIndex({ payment: 1 });
+
+// Admin dashboards
+db.orders.createIndex({ status: 1 });
+db.orders.createIndex({ createdAt: -1 });
+
+
+// One payment per order
+db.payments.createIndex({ order: 1 }, { unique: true });
+
+// Gateway callbacks (VERY IMPORTANT)
+db.payments.createIndex({ gatewayOrderId: 1 });
+db.payments.createIndex({ gatewayPaymentId: 1 });
+
+// User & admin filtering
+db.payments.createIndex({ user: 1 });
+db.payments.createIndex({ status: 1 });
+
+
+
+// One team per leader per event
+db.teams.createIndex(
+  { event: 1, leader: 1 },
+  { unique: true }
+);
+
+// Event-wise listing
+db.teams.createIndex({ event: 1 });
+
+
+
+// Auto-expire reset tokens
+db.password_resets.createIndex(
+  { expiresAt: 1 },
+  { expireAfterSeconds: 0 }
+);
+
+// Lookup & security
+db.password_resets.createIndex({ email: 1 });
+db.password_resets.createIndex({ token: 1 }, { unique: true });
+
+
+
+db.orders.createIndex({ totalAmount: 1 });
+db.payments.createIndex({ amount: 1 });
+
