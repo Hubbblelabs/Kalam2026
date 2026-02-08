@@ -24,16 +24,16 @@ const userLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+
   const pathname = usePathname();
   const lastScrollY = useRef(0);
-  const headerRef = useRef<HTMLElement>(null);
-  const { openAuth } = useAuth(); // Use auth context
+  const { openAuth } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Show/Hide logic
+      // Show/Hide logic for navbar
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setIsHidden(true);
       } else {
@@ -41,12 +41,11 @@ export function Header() {
       }
       lastScrollY.current = currentScrollY;
 
-      // Style logic
+      // Style logic for scrolled state
       setIsScrolled(currentScrollY > 20);
     };
 
     const handleFooterVisibility = (e: CustomEvent<boolean>) => {
-      // If footer is visible, hide navbar to avoid clash
       setIsHidden(e.detail);
     };
 
@@ -60,97 +59,106 @@ export function Header() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 pointer-events-none">
-
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 md:pt-4 pointer-events-none">
       <header
         className={cn(
           "pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
-          "shadow-[0_0_40px_rgba(245,179,1,0.15),0_8px_32px_rgba(11,60,93,0.4)]",
-          "backdrop-blur-3xl bg-gradient-to-b from-[#0B3C5D]/95 to-[#0B3C5D]/90 supports-[backdrop-filter]:bg-[#0B3C5D]/90",
-          "before:absolute before:inset-0 before:rounded-[1.5rem] before:bg-gradient-to-b before:from-white/10 before:to-transparent before:pointer-events-none",
-          "relative",
+          "relative flex items-center justify-between",
           isHidden ? "-translate-y-[200%] opacity-0" : "translate-y-0 opacity-100",
-          "w-[85%] md:w-auto",
-          "rounded-[1.5rem] border border-[#F5B301]/30"
+          // Responsive width and padding
+          "w-[95%] max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3",
+          "rounded-2xl border border-white/10 shadow-lg",
+          "bg-[#0B3C5D]",
+          isScrolled ? "border-[#F5B301]/20" : ""
+
         )}
       >
-
-        {/* Top Bar */}
-        <div className="flex items-center justify-center md:justify-between px-3 md:px-6 py-1.5 w-full">
-            {/* Logo - Centered on mobile, left on desktop */}
-            <Link
-              href="/"
-              className="relative h-6 w-20 md:h-7 md:w-28 hover:opacity-80 transition-opacity"
-            >
-              <NextImage
-                src="/kalam26-logo-hor-yellow.svg"
-                alt="Kalam 2026"
-                fill
-                className="object-contain"
-                priority
-              />
-            </Link>
-
-            {/* Desktop Navigation - Clean Glass Style */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "relative px-5 py-2 text-sm font-medium rounded-full transition-all duration-300",
-                      isActive ? "text-[#0B3C5D] bg-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] font-bold" : "text-white/80 hover:text-white hover:bg-white/10"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-2 mr-1">
-              {/* User Links (Cart & Orders) - Hidden on mobile, shown in bottom nav */}
-              {userLinks.map((link) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "hidden md:flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300",
-                      isActive 
-                        ? "text-[#0B3C5D] bg-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] font-bold" 
-                        : "text-white/80 hover:text-white hover:bg-white/10"
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                );
-              })}
-
-              {/* Login Link */}
-              <button
-                onClick={() => openAuth('login')}
-                className="hidden sm:block px-4 py-2.5 text-sm font-bold text-white/90 hover:text-white transition-colors cursor-pointer"
-              >
-                Login
-              </button>
-
-              {/* Register CTA */}
-              <button
-                onClick={() => openAuth('register')}
-                className="hidden sm:flex items-center px-6 py-2.5 rounded-full font-bold text-sm transition-all bg-[#F5B301] text-[#0B3C5D] hover:bg-white hover:text-[#0B3C5D] hover:shadow-[0_0_20px_rgba(245,179,1,0.4)] cursor-pointer"
-              >
-                Register
-              </button>
-            </div>
+        {/* Logo Section */}
+        <div className="flex-shrink-0 flex items-center">
+          <Link
+            href="/"
+            className="relative h-8 w-28 md:h-10 md:w-36 hover:opacity-90 transition-opacity"
+          >
+            <NextImage
+              src="/kalam26-logo-hor-yellow.svg"
+              alt="Kalam 2026 Logo"
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 768px) 112px, 144px"
+            />
+          </Link>
         </div>
-        
+
+        {/* Desktop Navigation - Centered */}
+        <nav className="hidden xl:flex items-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "relative px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-300",
+                  isActive ? "text-[#F5B301]" : "text-white/80 hover:text-white"
+                )}
+              >
+                {link.label}
+                {/* Active Indicator */}
+                <span className={cn(
+                  "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-[#F5B301] transition-all duration-300",
+                  isActive ? "w-1/2 opacity-100" : "w-0 opacity-0 group-hover:w-1/3"
+                )} />
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-3 md:gap-5">
+          {/* User Icons (Cart/Orders) */}
+          <div className="hidden xl:flex items-center gap-2 border-r border-white/10 pr-4 mr-1">
+            {userLinks.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "group flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all duration-200",
+                    isActive ? "bg-white/10 text-[#F5B301]" : "text-white/70 hover:text-white hover:bg-white/5"
+                  )}
+                  title={link.label}
+                >
+                  <Icon className="w-5 h-5 stroke-[1.5]" />
+                  {isActive && <span className="text-xs font-medium">{link.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Auth Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => openAuth('login')}
+              className="hidden sm:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => openAuth('register')}
+              className={cn(
+                "px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
+                "text-xs sm:text-sm",
+                "bg-[#F5B301] text-[#0B3C5D] shadow-[0_0_15px_rgba(245,179,1,0.3)]",
+                "hover:bg-[#FFD700] hover:shadow-[0_0_25px_rgba(245,179,1,0.5)] hover:-translate-y-0.5"
+              )}
+            >
+              Register
+            </button>
+          </div>
+        </div>
       </header>
     </div>
   );

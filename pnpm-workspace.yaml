@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
+  - argon2
   - bcrypt
   - esbuild
   - sharp

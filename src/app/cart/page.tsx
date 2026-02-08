@@ -22,13 +22,7 @@ export default function CartPage() {
 
   const fetchCart = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await cartApi.getCart(token);
+      const response = await cartApi.getCart();
       if (!response.data) {
         throw new Error('Cart data missing');
       }
@@ -43,10 +37,7 @@ export default function CartPage() {
   const handleRemoveItem = async (eventId: string) => {
     try {
       setRemoving(eventId);
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      await cartApi.removeFromCart(eventId, token);
+      await cartApi.removeFromCart(eventId);
       await fetchCart();
     } catch (error) {
       console.error('Failed to remove item:', error);
@@ -57,10 +48,7 @@ export default function CartPage() {
 
   const handleClearCart = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      await cartApi.clearCart(token);
+      await cartApi.clearCart();
       await fetchCart();
     } catch (error) {
       console.error('Failed to clear cart:', error);
@@ -70,10 +58,7 @@ export default function CartPage() {
   const handleCheckout = async () => {
     try {
       setOrdering(true);
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      await orderApi.createOrder(token);
+      await orderApi.createOrder();
       router.push(`/orders`);
     } catch (error) {
       console.error('Failed to create order:', error);
@@ -205,7 +190,7 @@ export default function CartPage() {
             <div>
               <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6 sticky top-24">
                 <h2 className="text-2xl font-bold text-white mb-6">Order Summary</h2>
-                
+
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-white/60">
                     <span>Subtotal</span>

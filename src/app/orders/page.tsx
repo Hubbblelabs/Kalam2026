@@ -22,13 +22,7 @@ export default function OrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await orderApi.getUserOrders(token);
+      const response = await orderApi.getUserOrders();
       setOrders(response.data || []);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
@@ -40,10 +34,7 @@ export default function OrdersPage() {
   const handleCancelOrder = async (orderId: string) => {
     try {
       setCancelling(orderId);
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      await orderApi.cancelOrder(orderId, token);
+      await orderApi.cancelOrder(orderId);
       await fetchOrders();
     } catch (error) {
       console.error('Failed to cancel order:', error);

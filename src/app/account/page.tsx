@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { userApi } from '@/lib/api';
+import { userApi, authApi } from '@/lib/api';
 import { User } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,13 +32,7 @@ export default function AccountPage() {
 
   const fetchProfile = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await userApi.getProfile(token);
+      const response = await userApi.getProfile();
       if (!response.data) {
         throw new Error('Profile data missing');
       }
@@ -50,10 +44,7 @@ export default function AccountPage() {
     } catch (error) {
       console.error('Failed to fetch profile:', error);
       // If unauthorized, redirect to login
-      if (error instanceof Error && error.message.includes('401')) {
-        localStorage.removeItem('accessToken');
-        router.push('/login');
-      }
+      router.push('/login');
     } finally {
       setLoading(false);
     }
@@ -62,10 +53,7 @@ export default function AccountPage() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      await userApi.updateProfile(formData, token);
+      await userApi.updateProfile(formData);
       await fetchProfile();
       setEditing(false);
     } catch (error) {
@@ -75,10 +63,14 @@ export default function AccountPage() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    router.push('/');
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      router.push('/');
+    }
   };
 
   if (loading) {

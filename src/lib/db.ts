@@ -1,10 +1,6 @@
+import 'server-only';
 import mongoose from 'mongoose';
-
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
+import { env } from './env';
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -12,6 +8,7 @@ interface MongooseCache {
 }
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongoose: MongooseCache | undefined;
 }
 
@@ -21,7 +18,7 @@ if (!global.mongoose) {
   global.mongoose = cached;
 }
 
-async function connectDB() {
+export async function connectDB() {
   if (cached.conn) {
     return cached.conn;
   }
@@ -29,10 +26,24 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    mongoose.set('strictQuery', true);
+
+    cached.promise = mongoose.connect(env.MONGODB_URI, opts).then((mongoose) => {
+      console.log('✅ MongoDB connected');
       return mongoose;
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.warn('MongoDB disconnected');
     });
   }
 
@@ -47,3 +58,4 @@ async function connectDB() {
 }
 
 export default connectDB;
+

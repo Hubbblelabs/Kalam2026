@@ -1,32 +1,19 @@
 import type { ApiResponse, Cart, Order, User } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-
-interface FetchOptions extends RequestInit {
-  token?: string;
-}
-
-async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
-  const { token, headers: customHeaders, ...fetchOptions } = options;
-
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...customHeaders,
-  };
-
-  if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...fetchOptions,
-    headers,
+async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const response = await fetch(`/api${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    credentials: 'include', // Important for session cookies
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error?.message || 'Something went wrong');
+    throw new Error(data.error?.message || data.error || 'Something went wrong');
   }
 
   return data;
@@ -46,11 +33,13 @@ export const authApi = {
       body: JSON.stringify(data),
     }),
 
-  refreshToken: (refreshToken: string) =>
-    fetchApi('/auth/refresh', {
+  logout: () =>
+    fetchApi('/auth/logout', {
       method: 'POST',
-      body: JSON.stringify({ refreshToken }),
     }),
+
+  getSession: () =>
+    fetchApi('/auth/session'),
 };
 
 // Events API
@@ -59,86 +48,77 @@ export const eventsApi = {
 
   getById: (id: string) => fetchApi(`/events/${id}`),
 
-  register: (eventId: string, token: string) =>
+  register: (eventId: string) =>
     fetchApi(`/events/${eventId}/register`, {
       method: 'POST',
-      token,
     }),
 };
 
 // Payments API
 export const paymentsApi = {
-  initiate: (data: { eventId: string; amount: number }, token: string) =>
+  initiate: (data: { eventId: string; amount: number }) =>
     fetchApi('/payments/initiate', {
       method: 'POST',
       body: JSON.stringify(data),
-      token,
     }),
 
-  checkStatus: (transactionId: string, token: string) =>
-    fetchApi(`/payments/status/${transactionId}`, { token }),
+  checkStatus: (transactionId: string) =>
+    fetchApi(`/payments/status/${transactionId}`),
 };
 
 // User API
 export const userApi = {
-  getProfile: (token: string) => fetchApi<ApiResponse<User>>('/users/me', { token }),
+  getProfile: () => fetchApi<ApiResponse<User>>('/users/me'),
 
-  updateProfile: (data: Partial<{ name: string; phone: string }>, token: string) =>
+  updateProfile: (data: Partial<{ name: string; phone: string }>) =>
     fetchApi('/users/me', {
       method: 'PATCH',
       body: JSON.stringify(data),
-      token,
     }),
 
-  getRegistrations: (token: string) => fetchApi('/users/me/registrations', { token }),
+  getRegistrations: () => fetchApi('/users/me/registrations'),
 };
 
 // Cart API
 export const cartApi = {
-  getCart: (token: string) => fetchApi<ApiResponse<Cart>>('/cart', { token }),
+  getCart: () => fetchApi<ApiResponse<Cart>>('/cart'),
 
-  addToCart: (eventId: string, token: string) =>
+  addToCart: (eventId: string) =>
     fetchApi('/cart', {
       method: 'POST',
       body: JSON.stringify({ eventId }),
-      token,
     }),
 
-  removeFromCart: (eventId: string, token: string) =>
+  removeFromCart: (eventId: string) =>
     fetchApi(`/cart/${eventId}`, {
       method: 'DELETE',
-      token,
     }),
 
-  clearCart: (token: string) =>
+  clearCart: () =>
     fetchApi('/cart', {
       method: 'DELETE',
-      token,
     }),
 };
 
 // Order API
 export const orderApi = {
-  createOrder: (token: string) =>
+  createOrder: () =>
     fetchApi<ApiResponse<Order>>('/orders', {
       method: 'POST',
-      token,
     }),
 
-  getUserOrders: (token: string) => fetchApi<ApiResponse<Order[]>>('/orders', { token }),
+  getUserOrders: () => fetchApi<ApiResponse<Order[]>>('/orders'),
 
-  getOrder: (orderId: string, token: string) => fetchApi<ApiResponse<Order>>(`/orders/${orderId}`, { token }),
+  getOrder: (orderId: string) => fetchApi<ApiResponse<Order>>(`/orders/${orderId}`),
 
-  cancelOrder: (orderId: string, token: string) =>
+  cancelOrder: (orderId: string) =>
     fetchApi<ApiResponse<Order>>(`/orders/${orderId}/cancel`, {
       method: 'PATCH',
-      token,
     }),
 
-  confirmOrder: (orderId: string, paymentId: string, token: string) =>
+  confirmOrder: (orderId: string, paymentId: string) =>
     fetchApi<ApiResponse<Order>>('/orders/confirm', {
       method: 'POST',
       body: JSON.stringify({ orderId, paymentId }),
-      token,
     }),
 };
