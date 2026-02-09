@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
-import { User } from '@/models/user.model';
+import { Admin } from '@/models/admin.model';
 import { verifyPassword } from '@/lib/auth';
 import { getSession } from '@/lib/session';
 import { z } from 'zod';
@@ -18,9 +18,9 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const validatedData = loginSchema.parse(body);
 
-        // Find user (admin users only)
-        const user = await User.findOne({ email: validatedData.email });
-        if (!user) {
+        // Find admin from admins collection
+        const admin = await Admin.findOne({ email: validatedData.email });
+        if (!admin) {
             return NextResponse.json(
                 { success: false, error: 'Invalid email or password' },
                 { status: 401 }
@@ -28,14 +28,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Verify password - check if passwordHash exists first
-        if (!user.passwordHash) {
+        if (!admin.passwordHash) {
             return NextResponse.json(
                 { success: false, error: 'Invalid email or password' },
                 { status: 401 }
             );
         }
 
-        const isValidPassword = await verifyPassword(user.passwordHash, validatedData.password);
+        const isValidPassword = await verifyPassword(admin.passwordHash, validatedData.password);
         if (!isValidPassword) {
             return NextResponse.json(
                 { success: false, error: 'Invalid email or password' },
@@ -43,20 +43,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if user is admin
-        if (user.role !== 'admin') {
-            return NextResponse.json(
-                { success: false, error: 'Access denied. Admin privileges required.' },
-                { status: 403 }
-            );
-        }
-
         // Create session
         const session = await getSession();
-        session.userId = user.id;
-        session.email = user.email;
-        session.name = user.name;
-        session.role = user.role;
+        session.userId = admin.id;
+        session.email = admin.email;
+        session.name = admin.name;
+        session.role = 'admin';
+        session.adminRole = admin.role;
         session.isLoggedIn = true;
         await session.save();
 
@@ -64,10 +57,11 @@ export async function POST(request: NextRequest) {
             success: true,
             data: {
                 user: {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email,
+                    role: 'admin',
+                    adminRole: admin.role,
                 },
             },
         });

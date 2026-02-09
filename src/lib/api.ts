@@ -10,6 +10,11 @@ async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise
     credentials: 'include', // Important for session cookies
   });
 
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    throw new Error('Server returned an unexpected response');
+  }
+
   const data = await response.json();
 
   if (!response.ok) {

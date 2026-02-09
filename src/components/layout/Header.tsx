@@ -132,7 +132,7 @@ export function Header() {
       <header
         className={cn(
           "pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
-          "relative flex items-center justify-between",
+          "relative flex items-center",
           isHidden ? "-translate-y-[200%] opacity-0" : "translate-y-0 opacity-100",
           // Responsive width and padding
           "w-[95%] max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3",
@@ -143,7 +143,7 @@ export function Header() {
         )}
       >
         {/* Logo Section */}
-        <div className="shrink-0 flex items-center">
+        <div className="shrink-0 flex items-center mr-12">
           <Link
             href="/"
             className="relative h-8 w-28 md:h-10 md:w-36 hover:opacity-90 transition-opacity"
@@ -160,7 +160,7 @@ export function Header() {
         </div>
 
         {/* Desktop Navigation - Centered */}
-        <nav className="hidden xl:flex items-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <nav className="hidden xl:flex items-center gap-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -184,9 +184,9 @@ export function Header() {
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 md:gap-5">
+        <div className="ml-auto flex items-center gap-3 md:gap-6">
           {/* User Icons (Cart/Orders) */}
-          <div className="hidden xl:flex items-center gap-2 border-r border-white/10 pr-4 mr-1">
+          <div className="hidden xl:flex items-center gap-1 border-r border-white/10 pr-4">
             {userLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -195,7 +195,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "group flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all duration-200",
+                    "group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200",
                     isActive ? "bg-white/10 text-accent-500" : "text-white/70 hover:text-white hover:bg-white/5"
                   )}
                   title={link.label}
@@ -208,13 +208,13 @@ export function Header() {
           </div>
 
           {/* Auth Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isLoading && (
               isLoggedIn ? (
                 <>
                   <Link
                     href="/account"
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
+                    className="hidden sm:flex items-center gap-2 pr-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
                   >
                     <User className="w-4 h-4" />
                     Account
@@ -222,7 +222,7 @@ export function Header() {
                   <button
                     onClick={handleSignOut}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
+                      "flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300 whitespace-nowrap",
                       "text-xs sm:text-sm",
                       "bg-red-500/10 text-red-400 border border-red-500/20",
                       "hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30"

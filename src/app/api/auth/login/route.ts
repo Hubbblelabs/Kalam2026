@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const validatedData = loginSchema.parse(body);
 
-        // Find user (regular users only)
-        const user = await User.findOne({ email: validatedData.email });
+        // Find user (regular users only, not admins)
+        const user = await User.findOne({ email: validatedData.email, role: { $ne: 'admin' } });
         if (!user) {
             return NextResponse.json(
                 { success: false, error: 'Invalid email or password' },
