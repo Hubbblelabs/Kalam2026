@@ -41,14 +41,14 @@ export function MarqueeText({
     return (
         <div
             ref={containerRef}
-            className="relative overflow-hidden py-10 bg-[#Fdfdf8] border-y border-black/5"
+            className="relative overflow-hidden py-10 bg-cream border-y border-black/5"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{ perspective: '800px' }}
         >
             {/* Gradient fade edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#Fdfdf8] to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#Fdfdf8] to-transparent z-10" />
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-cream to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-cream to-transparent z-10" />
 
             {/* Main marquee track */}
             <div
@@ -67,20 +67,19 @@ export function MarqueeText({
                         <span
                             className="text-6xl md:text-8xl font-black uppercase tracking-tighter mx-8 text-transparent transition-all duration-300 group-hover:scale-110"
                             style={{
-                                WebkitTextStroke: isHovered && index % 3 === 1 ? '2px #1C5D99' : '1px #1C2533',
+                                WebkitTextStroke: isHovered && index % 3 === 1 ? '2px var(--color-secondary-500)' : '1px var(--color-neutral-dark)',
                                 fontFamily: 'var(--font-heading)',
                                 opacity: 0.8,
-                                textShadow: isHovered ? '0 4px 30px rgba(28, 93, 153, 0.15)' : 'none',
+                                textShadow: isHovered ? '0 4px 30px rgba(var(--color-secondary-500), 0.15)' : 'none',
                             }}
                         >
                             {item}
                         </span>
                         {/* Decorative separator with glow */}
                         <span
-                            className="text-4xl transition-all duration-300"
+                            className="text-4xl transition-all duration-300 text-accent-500"
                             style={{
-                                color: '#F5B301',
-                                textShadow: isHovered ? '0 0 20px rgba(245, 179, 1, 0.6)' : 'none',
+                                textShadow: isHovered ? '0 0 20px rgba(var(--color-accent-500), 0.6)' : 'none',
                                 transform: isHovered ? 'scale(1.2) rotate(15deg)' : 'scale(1) rotate(0deg)',
                             }}
                         >
@@ -103,14 +102,14 @@ export function MarqueeText({
                         <span
                             className="text-6xl md:text-8xl font-black uppercase tracking-tighter mx-8"
                             style={{
-                                WebkitTextStroke: '1px rgba(28, 37, 51, 0.3)',
+                                WebkitTextStroke: '1px rgba(var(--color-neutral-dark), 0.3)',
                                 fontFamily: 'var(--font-heading)',
                                 color: 'transparent',
                             }}
                         >
                             {item}
                         </span>
-                        <span className="text-4xl text-[#F5B301]/30">✦</span>
+                        <span className="text-4xl text-accent-500/30">✦</span>
                     </div>
                 ))}
             </div>

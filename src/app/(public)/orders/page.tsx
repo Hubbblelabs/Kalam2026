@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { orderApi } from '@/lib/api';
 import { Order } from '@/types';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+// Removed unused imports
 import { Package, Calendar, MapPin, CreditCard, Receipt, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,16 +50,16 @@ export default function OrdersPage() {
     };
 
     return (
-      <Badge className={cn('border', variants[status])}>
+      <span className={cn('inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2', 'border', variants[status])}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
+      </span>
     );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#F5B301] border-t-transparent"></div>
+      <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent-500 border-t-transparent"></div>
       </div>
     );
   }
@@ -69,7 +67,7 @@ export default function OrdersPage() {
   const isEmpty = orders.length === 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] py-20 px-4">
+    <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary py-20 px-4">
       <div className="max-w-6xl mx-auto pt-12">
         {/* Header */}
         <div className="mb-8">
@@ -82,25 +80,25 @@ export default function OrdersPage() {
         </div>
 
         {isEmpty ? (
-          <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center">
+          <div className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center">
             <Receipt className="w-20 h-20 mx-auto mb-4 text-white/30" />
             <h2 className="text-2xl font-bold text-white mb-2">No orders yet</h2>
             <p className="text-white/60 mb-6">
               Start by adding events to your cart and placing an order
             </p>
-            <Button
+            <button
               onClick={() => router.push('/events')}
-              className="bg-[#F5B301] hover:bg-[#F5B301]/90 text-[#0B3C5D] font-bold"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent-500 hover:bg-accent-500/90 text-primary font-bold h-10 px-4 py-2"
             >
               Browse Events
-            </Button>
-          </Card>
+            </button>
+          </div>
         ) : (
           <div className="space-y-6">
             {orders.map((order) => (
-              <Card
+              <div
                 key={order.id}
-                className="bg-white/5 backdrop-blur-xl border-white/10 p-6 hover:border-[#F5B301]/30 transition-all"
+                className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-6 hover:border-accent-500/30 transition-all"
               >
                 {/* Order Header */}
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-6 pb-6 border-b border-white/10">
@@ -122,7 +120,7 @@ export default function OrdersPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-[#F5B301]">
+                    <div className="text-3xl font-bold text-accent-500">
                       ₹{order.totalAmount}
                     </div>
                     <p className="text-sm text-white/60">
@@ -153,7 +151,7 @@ export default function OrdersPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-lg font-bold text-[#F5B301]">
+                      <div className="text-lg font-bold text-accent-500">
                         ₹{item.price}
                       </div>
                     </div>
@@ -169,12 +167,10 @@ export default function OrdersPage() {
                     </div>
                   )}
                   {order.status === 'pending' && (
-                    <Button
+                    <button
                       onClick={() => handleCancelOrder(order.id)}
                       disabled={cancelling === order.id}
-                      variant="outline"
-                      size="sm"
-                      className="ml-auto border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-9 px-3 ml-auto border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
                     >
                       {cancelling === order.id ? (
                         <span className="flex items-center gap-2">
@@ -187,10 +183,10 @@ export default function OrdersPage() {
                           Cancel Order
                         </span>
                       )}
-                    </Button>
+                    </button>
                   )}
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         )}

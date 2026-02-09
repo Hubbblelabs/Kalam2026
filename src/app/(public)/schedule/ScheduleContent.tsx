@@ -213,14 +213,13 @@ export default function ScheduleContent() {
     };
 
     return (
-        <div className="min-h-screen bg-[#Fdfdf8] text-[#1C2533] pb-32 relative overflow-hidden">
-
+        <div className="min-h-screen bg-cream text-neutral-dark pb-32 relative overflow-hidden">
             {/* Background Ambience */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F5B301]/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary-500/5 rounded-full blur-[120px] pointer-events-none" />
 
             {/* Architectural Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-size-[60px_60px] pointer-events-none" />
 
             <div className="relative z-10">
                 <ScheduleHeader />
@@ -261,7 +260,7 @@ export default function ScheduleContent() {
 
             {/* Footer Note */}
             <div className="text-center mt-24 mb-12">
-                <p className="text-[#1C2533]/40 text-sm font-mono uppercase tracking-widest">
+                <p className="text-neutral-dark/40 text-sm font-mono uppercase tracking-widest">
                     Schedule subject to change
                 </p>
             </div>

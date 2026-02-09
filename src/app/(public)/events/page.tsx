@@ -212,19 +212,17 @@ export default function EventsPage() {
         : events.filter(event => event.category === activeCategory);
 
     return (
-        <div className="min-h-screen bg-[#Fdfdf8] pt-24 md:pt-32 pb-20">
+        <div className="min-h-screen bg-cream pt-24 md:pt-32 pb-20">
             {/* Background Grid */}
-            <div
-                className="fixed inset-0 bg-[linear-gradient(rgba(28,93,153,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(28,93,153,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] pointer-events-none -z-10"
-            />
+            <div className="absolute inset-0 bg-neutral-dark mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] pointer-events-none -z-10" />
 
             <div className="container-custom mx-auto px-4 md:px-6">
                 {/* Header */}
                 <div className="text-center mb-12 space-y-4">
-                    <h1 className="font-heading font-bold text-4xl md:text-6xl text-[#1C2533] animate-fade-in-up">
-                        Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1C5D99] to-[#F5B301]">Events</span>
+                    <h1 className="font-heading font-bold text-4xl md:text-6xl text-neutral-dark animate-fade-in-up">
+                        Explore <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary-500 to-accent-500">Events</span>
                     </h1>
-                    <p className="text-lg text-[#6B7B8C] max-w-2xl mx-auto animate-fade-in-up delay-100">
+                    <p className="text-lg text-neutral-dark/60 max-w-2xl mx-auto animate-fade-in-up delay-100">
                         Dive into a world of competition, learning, and celebration across multiple disciplines.
                     </p>
                 </div>
@@ -240,14 +238,14 @@ export default function EventsPage() {
                                     className={cn(
                                         "text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 relative overflow-hidden",
                                         activeCategory === category.id
-                                            ? "text-[#1C5D99] bg-[#1C5D99]/5 font-bold shadow-sm"
-                                            : "text-[#6B7B8C] hover:bg-[#1C2533]/5 hover:text-[#1C2533]"
+                                            ? "text-secondary-500 bg-secondary-500/5 font-bold shadow-sm"
+                                            : "text-neutral-dark/60 hover:bg-neutral-dark/5 hover:text-neutral-dark"
                                     )}
                                 >
                                     {activeCategory === category.id && (
                                         <motion.div
                                             layoutId="activeCategory"
-                                            className="absolute left-0 top-0 bottom-0 w-1 bg-[#1C5D99]"
+                                            className="absolute left-0 top-0 bottom-0 w-1 bg-secondary-500"
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
@@ -260,7 +258,7 @@ export default function EventsPage() {
                     </div>
 
                     {/* Mobile Horizontal Scroll Navigation */}
-                    <div className="lg:hidden w-full overflow-x-auto pb-4 -mx-4 px-4 sticky top-[70px] z-30 bg-[#Fdfdf8]/90 backdrop-blur-md">
+                    <div className="lg:hidden w-full overflow-x-auto pb-4 -mx-4 px-4 sticky top-[70px] z-30 bg-cream/90 backdrop-blur-md">
                         <div className="flex space-x-2 md:justify-center">
                             {categories.map((category) => (
                                 <button
@@ -269,8 +267,8 @@ export default function EventsPage() {
                                     className={cn(
                                         "whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
                                         activeCategory === category.id
-                                            ? "bg-[#1C5D99] text-white border-[#1C5D99]"
-                                            : "bg-white text-[#6B7B8C] border-gray-200"
+                                            ? "bg-secondary-500 text-white border-secondary-500"
+                                            : "bg-white text-neutral-dark/60 border-gray-200"
                                     )}
                                 >
                                     {category.label}
@@ -310,7 +308,7 @@ export default function EventsPage() {
 
                         {/* Empty State */}
                         {filteredEvents.length === 0 && (
-                            <div className="text-center py-20 text-[#6B7B8C] bg-white rounded-2xl border border-dashed border-[#1C2533]/10">
+                            <div className="text-center py-20 text-neutral-dark/60 bg-white rounded-2xl border border-dashed border-neutral-dark/10">
                                 <p className="text-xl">No events found in this category yet.</p>
                             </div>
                         )}

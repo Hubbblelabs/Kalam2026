@@ -59,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen bg-white antialiased dark:bg-gray-950">
+      <body className="min-h-screen bg-white antialiased">
         {children}
         <Toaster />
       </body>

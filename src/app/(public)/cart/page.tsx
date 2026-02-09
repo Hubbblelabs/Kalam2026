@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { cartApi, orderApi } from '@/lib/api';
 import { Cart } from '@/types';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+// Removed unused imports
 import { Trash2, ShoppingBag, Calendar, MapPin, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -76,8 +75,8 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#F5B301] border-t-transparent"></div>
+      <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent-500 border-t-transparent"></div>
       </div>
     );
   }
@@ -85,7 +84,7 @@ export default function CartPage() {
   const isEmpty = !cart || cart.items.length === 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] py-20 px-4">
+    <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary py-20 px-4">
       <div className="max-w-6xl mx-auto pt-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -98,38 +97,37 @@ export default function CartPage() {
             </p>
           </div>
           {!isEmpty && (
-            <Button
+            <button
               onClick={handleClearCart}
-              variant="outline"
-              className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
             >
               Clear Cart
-            </Button>
+            </button>
           )}
         </div>
 
         {isEmpty ? (
-          <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center">
+          <div className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center">
             <ShoppingBag className="w-20 h-20 mx-auto mb-4 text-white/30" />
             <h2 className="text-2xl font-bold text-white mb-2">Your cart is empty</h2>
             <p className="text-white/60 mb-6">
               Browse events and add them to your cart to get started
             </p>
-            <Button
+            <button
               onClick={() => router.push('/events')}
-              className="bg-[#F5B301] hover:bg-[#F5B301]/90 text-[#0B3C5D] font-bold"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent-500 hover:bg-accent-500/90 text-primary font-bold h-10 px-4 py-2"
             >
               Browse Events
-            </Button>
-          </Card>
+            </button>
+          </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cart.items.map((item) => (
-                <Card
+                <div
                   key={item.event.id}
-                  className="bg-white/5 backdrop-blur-xl border-white/10 p-6 hover:border-[#F5B301]/30 transition-all"
+                  className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-6 hover:border-accent-500/30 transition-all"
                 >
                   <div className="flex gap-4">
                     <div className="flex-1">
@@ -157,15 +155,13 @@ export default function CartPage() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <div className="text-2xl font-bold text-[#F5B301]">
+                        <div className="text-2xl font-bold text-accent-500">
                           ₹{item.event.registrationFee}
                         </div>
-                        <Button
+                        <button
                           onClick={() => handleRemoveItem(item.event.id)}
                           disabled={removing === item.event.id}
-                          variant="outline"
-                          size="sm"
-                          className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+                          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-9 px-3 border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500"
                         >
                           {removing === item.event.id ? (
                             <span className="flex items-center gap-2">
@@ -178,17 +174,17 @@ export default function CartPage() {
                               Remove
                             </span>
                           )}
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
 
             {/* Order Summary */}
             <div>
-              <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6 sticky top-24">
+              <div className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-6 sticky top-24">
                 <h2 className="text-2xl font-bold text-white mb-6">Order Summary</h2>
 
                 <div className="space-y-3 mb-6">
@@ -202,32 +198,32 @@ export default function CartPage() {
                   </div>
                   <div className="border-t border-white/10 pt-3 flex justify-between text-xl font-bold text-white">
                     <span>Total</span>
-                    <span className="text-[#F5B301]">₹{calculateTotal()}</span>
+                    <span className="text-accent-500">₹{calculateTotal()}</span>
                   </div>
                 </div>
 
-                <Button
+                <button
                   onClick={handleCheckout}
                   disabled={ordering}
                   className={cn(
-                    "w-full bg-[#F5B301] hover:bg-[#F5B301]/90 text-[#0B3C5D] font-bold py-6 text-lg",
+                    "inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 w-full bg-accent-500 hover:bg-accent-500/90 text-primary font-bold py-6 text-lg",
                     ordering && "opacity-50 cursor-not-allowed"
                   )}
                 >
                   {ordering ? (
                     <span className="flex items-center gap-2">
-                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#0B3C5D] border-t-transparent"></div>
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary border-t-transparent"></div>
                       Processing...
                     </span>
                   ) : (
                     'Proceed to Checkout'
                   )}
-                </Button>
+                </button>
 
                 <p className="text-xs text-white/40 mt-4 text-center">
                   By proceeding, you agree to our terms and conditions
                 </p>
-              </Card>
+              </div>
             </div>
           </div>
         )}

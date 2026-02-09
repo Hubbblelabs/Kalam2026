@@ -1,14 +1,32 @@
 'use client';
 
-import { useRef, useMemo, useCallback, Suspense } from 'react';
+import { useRef, useMemo, useCallback, Suspense, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float, Icosahedron, Octahedron, TorusKnot } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Theme colors
-const THEME_BLUE = '#1C5D99';
-const THEME_GOLD = '#F5B301';
-const THEME_DARK = '#1C2533';
+// Hook to get theme colors from CSS variables
+function useThemeColor(variable: string, fallback: string) {
+    const [color, setColor] = useState(fallback);
+
+    useEffect(() => {
+        const updateColor = () => {
+            if (typeof window === 'undefined') return;
+            const val = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+            if (val) setColor(val);
+        };
+
+        updateColor();
+
+        // Listen for class changes on html element (for theme switching)
+        const observer = new MutationObserver(updateColor);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style'] });
+
+        return () => observer.disconnect();
+    }, [variable]);
+
+    return color;
+}
 
 // Particle count for different screen sizes
 const PARTICLE_COUNT = 800;
@@ -20,6 +38,7 @@ interface ParticleFieldProps {
 function ParticleField({ mousePosition }: ParticleFieldProps) {
     const meshRef = useRef<THREE.InstancedMesh>(null);
     const { viewport } = useThree();
+    const themeBlue = useThemeColor('--color-secondary-500', '#1C5D99');
 
     // Generate particle positions
     const particles = useMemo(() => {
@@ -86,10 +105,10 @@ function ParticleField({ mousePosition }: ParticleFieldProps) {
     // Create materials for particles
     const blueMaterial = useMemo(() =>
         new THREE.MeshBasicMaterial({
-            color: THEME_BLUE,
+            color: themeBlue,
             transparent: true,
             opacity: 0.6
-        }), []);
+        }), [themeBlue]);
 
     return (
         <instancedMesh ref={meshRef} args={[undefined, undefined, PARTICLE_COUNT]}>
@@ -102,6 +121,9 @@ function ParticleField({ mousePosition }: ParticleFieldProps) {
 // Floating 3D shapes
 function FloatingShapes() {
     const groupRef = useRef<THREE.Group>(null);
+    const themeBlue = useThemeColor('--color-secondary-500', '#1C5D99');
+    const themeGold = useThemeColor('--color-accent-500', '#F5B301');
+    const themeDark = useThemeColor('--color-neutral-dark', '#1C2533');
 
     useFrame((state) => {
         if (!groupRef.current) return;
@@ -114,7 +136,7 @@ function FloatingShapes() {
             <Float speed={1.5} rotationIntensity={0.5} floatIntensity={2}>
                 <Icosahedron args={[0.8]} position={[-6, 2, -3]}>
                     <meshStandardMaterial
-                        color={THEME_BLUE}
+                        color={themeBlue}
                         wireframe
                         transparent
                         opacity={0.4}
@@ -126,7 +148,7 @@ function FloatingShapes() {
             <Float speed={1.2} rotationIntensity={0.8} floatIntensity={1.5}>
                 <TorusKnot args={[0.4, 0.15, 64, 16]} position={[5, -1, -4]}>
                     <meshStandardMaterial
-                        color={THEME_GOLD}
+                        color={themeGold}
                         wireframe
                         transparent
                         opacity={0.5}
@@ -138,7 +160,7 @@ function FloatingShapes() {
             <Float speed={2} rotationIntensity={1} floatIntensity={1}>
                 <Octahedron args={[0.5]} position={[-4, -3, -2]}>
                     <meshStandardMaterial
-                        color={THEME_BLUE}
+                        color={themeBlue}
                         transparent
                         opacity={0.3}
                     />
@@ -149,7 +171,7 @@ function FloatingShapes() {
             <Float speed={1} rotationIntensity={0.3} floatIntensity={2.5}>
                 <Icosahedron args={[0.6]} position={[6, 3, -5]}>
                     <meshStandardMaterial
-                        color={THEME_GOLD}
+                        color={themeGold}
                         wireframe
                         transparent
                         opacity={0.35}
@@ -161,7 +183,7 @@ function FloatingShapes() {
             <Float speed={0.8} rotationIntensity={0.2} floatIntensity={0.5}>
                 <Octahedron args={[0.3]} position={[0, 0, -6]}>
                     <meshStandardMaterial
-                        color={THEME_DARK}
+                        color={themeDark}
                         transparent
                         opacity={0.15}
                     />
@@ -173,11 +195,14 @@ function FloatingShapes() {
 
 // Main Scene
 function Scene({ mousePosition }: { mousePosition: React.RefObject<{ x: number; y: number }> }) {
+    const themeBlue = useThemeColor('--color-secondary-500', '#1C5D99');
+    const themeGold = useThemeColor('--color-accent-500', '#F5B301');
+
     return (
         <>
             <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} color={THEME_GOLD} />
-            <pointLight position={[-10, -10, -10]} intensity={0.5} color={THEME_BLUE} />
+            <pointLight position={[10, 10, 10]} intensity={1} color={themeGold} />
+            <pointLight position={[-10, -10, -10]} intensity={0.5} color={themeBlue} />
 
             <ParticleField mousePosition={mousePosition} />
             <FloatingShapes />

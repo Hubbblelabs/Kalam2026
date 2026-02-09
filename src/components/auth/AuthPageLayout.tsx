@@ -31,11 +31,11 @@ export function AuthPageLayout({
     return (
         <div className="min-h-screen w-full flex bg-gray-50">
             {/* Visual Side (Yellow Panel) - Hidden on mobile, 5/12 width on desktop */}
-            <div className="hidden lg:flex w-5/12 bg-[#F5B301] relative p-12 text-neutral-dark flex-col justify-between overflow-hidden sticky top-0 h-screen">
+            <div className="hidden lg:flex w-5/12 bg-accent-500 p-12 text-neutral-dark flex-col justify-between overflow-hidden sticky top-0 h-screen">
                 {/* Background elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-80 h-80 bg-orange-400/20 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/3" />
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-30" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-size-[40px_40px] opacity-30" />
 
                 <div className="relative z-10 flex items-center justify-between">
                     <Link href="/" className="font-heading font-black text-3xl tracking-tighter text-neutral-dark">KALAM 2026</Link>

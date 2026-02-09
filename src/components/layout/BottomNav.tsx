@@ -157,7 +157,7 @@ export function BottomNav() {
             ref={sheetRef}
             className={cn(
               "transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden",
-              "bg-[#0B3C5D] rounded-[2rem] border border-white/10 shadow-lg"
+              "bg-primary rounded-[2rem] border border-white/10 shadow-lg"
             )}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -189,7 +189,7 @@ export function BottomNav() {
                         className={cn(
                           "text-xl font-bold py-3 px-4 rounded-xl transition-all duration-300",
                           isActive
-                            ? "text-[#F5B301] bg-[#F5B301]/10"
+                            ? "text-accent-500 bg-accent-500/10"
                             : "text-white/80 hover:text-white hover:bg-white/5"
                         )}
                       >
@@ -211,7 +211,7 @@ export function BottomNav() {
                           href={social.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 hover:text-[#F5B301] transition-all"
+                          className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 hover:text-accent-500 transition-all"
                         >
                           {social.icon}
                         </a>
@@ -261,7 +261,7 @@ export function BottomNav() {
                         onClick={() => {
                           setIsMoreOpen(false);
                         }}
-                        className="py-3 rounded-xl bg-[#F5B301] text-[#0B3C5D] font-bold hover:bg-white transition-all flex items-center justify-center"
+                        className="py-3 rounded-xl bg-accent-500 text-primary font-bold hover:bg-white transition-all flex items-center justify-center"
                       >
                         Register
                       </Link>
@@ -288,7 +288,7 @@ export function BottomNav() {
                     <div className={cn(
                       "relative flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300",
                       isActive
-                        ? "bg-[#F5B301]/15 text-[#F5B301] shadow-[0_0_12px_rgba(245,179,1,0.2)]"
+                        ? "bg-accent-500/15 text-accent-500 shadow-[0_0_12px_rgba(245,179,1,0.2)]"
                         : "text-white/60 hover:text-white/90 hover:bg-white/5"
                     )}>
                       <Icon className={cn(
@@ -298,7 +298,7 @@ export function BottomNav() {
                     </div>
                     <span className={cn(
                       "text-[10px] font-medium transition-all duration-300",
-                      isActive ? "text-[#F5B301] font-semibold" : "text-white/60"
+                      isActive ? "text-accent-500 font-semibold" : "text-white/60"
                     )}>
                       {item.label}
                     </span>
@@ -316,7 +316,7 @@ export function BottomNav() {
                 <div className={cn(
                   "relative flex items-center justify-center w-10 h-10 rounded-2xl transition-all duration-300",
                   isMoreOpen
-                    ? "bg-[#F5B301]/15 text-[#F5B301] shadow-[0_0_12px_rgba(245,179,1,0.2)]"
+                    ? "bg-accent-500/15 text-accent-500 shadow-[0_0_12px_rgba(245,179,1,0.2)]"
                     : "text-white/60 hover:text-white/90 hover:bg-white/5"
                 )}>
                   <MoreHorizontal className={cn(
@@ -326,7 +326,7 @@ export function BottomNav() {
                 </div>
                 <span className={cn(
                   "text-[10px] font-medium transition-all duration-300",
-                  isMoreOpen ? "text-[#F5B301] font-semibold" : "text-white/60"
+                  isMoreOpen ? "text-accent-500 font-semibold" : "text-white/60"
                 )}>
                   More
                 </span>

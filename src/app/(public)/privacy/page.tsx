@@ -2,11 +2,11 @@
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-[#Fdfdf8] pt-32 pb-20">
+        <div className="min-h-screen bg-cream pt-32 pb-20">
             <div className="container-custom max-w-4xl">
-                <h1 className="font-heading font-bold text-4xl md:text-5xl text-[#1C2533] mb-8">Privacy Policy</h1>
+                <h1 className="font-heading font-bold text-4xl md:text-5xl text-neutral-dark mb-8">Privacy Policy</h1>
 
-                <div className="prose prose-lg prose-blue max-w-none text-[#6B7B8C]">
+                <div className="prose prose-lg prose-blue max-w-none text-neutral-dark/60">
                     <p>Last updated: January 2026</p>
 
                     <h3>1. Information We Collect</h3>

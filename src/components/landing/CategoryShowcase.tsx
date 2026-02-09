@@ -26,19 +26,19 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
 
     const colorMap = {
         blue: {
-            bg: 'bg-[#1C5D99]',
-            text: 'text-[#1C5D99]',
-            gradient: 'from-[#1C5D99]/20 to-[#1C5D99]/5'
+            bg: 'bg-secondary-500',
+            text: 'text-secondary-500',
+            gradient: 'from-secondary-500/20 to-secondary-500/5'
         },
         orange: {
-            bg: 'bg-[#FF8C00]',
-            text: 'text-[#FF8C00]',
-            gradient: 'from-[#FF8C00]/20 to-[#FF8C00]/5'
+            bg: 'bg-accent-orange',
+            text: 'text-accent-orange',
+            gradient: 'from-accent-orange/20 to-accent-orange/5'
         },
         yellow: {
-            bg: 'bg-[#F5B301]',
-            text: 'text-[#F5B301]',
-            gradient: 'from-[#F5B301]/20 to-[#F5B301]/5'
+            bg: 'bg-accent-500',
+            text: 'text-accent-500',
+            gradient: 'from-accent-500/20 to-accent-500/5'
         }
     };
 
@@ -54,14 +54,14 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
 
                         className={cn(
                             "relative flex-1 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group border border-black/5",
-                            isActive ? "flex-[3] lg:flex-[4]" : "hover:flex-[1.2]"
+                            isActive ? "flex-3 lg:flex-4" : "hover:flex-[1.2]"
                         )}
                         onMouseEnter={() => window.innerWidth >= 1024 && setActiveIndex(index)}
                         onClick={() => setActiveIndex(index)}
                     >
                         {/* Background Image / Gradient */}
                         <div className={cn(
-                            "absolute inset-0 bg-gradient-to-br transition-opacity duration-500",
+                            "absolute inset-0 bg-linear-to-br transition-opacity duration-500",
                             colors.gradient,
                             isActive ? "opacity-100" : "opacity-0 group-hover:opacity-30"
                         )} />
@@ -84,8 +84,8 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                                 <h3 className={cn(
                                     "font-heading font-bold text-2xl lg:text-4xl transition-all duration-500 origin-left whitespace-nowrap",
                                     isActive
-                                        ? "text-[#1C2533] scale-100 translate-x-0 translate-y-0 rotate-0"
-                                        : "text-[#1C2533]/40 rotate-0 translate-x-0 translate-y-0 lg:-rotate-90 lg:origin-top-left lg:translate-y-44 lg:translate-x-12"
+                                        ? "text-neutral-dark scale-100 translate-x-0 translate-y-0 rotate-0"
+                                        : "text-neutral-dark/40 rotate-0 translate-x-0 translate-y-0 lg:-rotate-90 lg:origin-top-left lg:translate-y-44 lg:translate-x-12"
                                 )}>
                                     <span className={cn(
                                         "block transition-all duration-500",
@@ -100,7 +100,7 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                                 "space-y-6 transition-opacity duration-500 mt-4 lg:mt-0",
                                 isActive ? "opacity-100 relative" : "opacity-0 absolute bottom-0 left-0 right-0 p-6 lg:p-10 pointer-events-none"
                             )}>
-                                <p className="text-base lg:text-lg text-[#6B7B8C] leading-relaxed max-w-md">
+                                <p className="text-base lg:text-lg text-neutral-dark/60 leading-relaxed max-w-md">
                                     {category.description}
                                 </p>
 
@@ -112,7 +112,7 @@ export function CategoryShowcase({ categories }: CategoryShowcaseProps) {
                                     )}
                                 >
                                     Explore {category.title}
-                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                                 </Link>
                             </div>
 

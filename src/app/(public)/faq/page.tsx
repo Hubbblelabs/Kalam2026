@@ -61,13 +61,13 @@ export default function FAQPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#Fdfdf8] pt-32 pb-20">
+        <div className="min-h-screen bg-cream pt-32 pb-20">
             <div className="container-custom max-w-4xl">
                 <div className="text-center mb-16 space-y-4">
-                    <h1 className="font-heading font-bold text-5xl md:text-7xl text-[#1C2533] animate-fade-in-up">
-                        frequently asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1C5D99] to-[#F5B301]">questions</span>
+                    <h1 className="font-heading font-bold text-5xl md:text-7xl text-neutral-dark animate-fade-in-up">
+                        frequently asked <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary-500 to-accent-500">questions</span>
                     </h1>
-                    <p className="text-xl text-[#6B7B8C] max-w-2xl mx-auto animate-fade-in-up delay-100">
+                    <p className="text-xl text-neutral-dark/60 max-w-2xl mx-auto animate-fade-in-up delay-100">
                         Everything you need to know about Kalam 2026. Can&apos;t find the answer? Contact us directly.
                     </p>
                 </div>
@@ -80,14 +80,14 @@ export default function FAQPage() {
                     <input
                         type="text"
                         placeholder="Search for answers..."
-                        className="w-full pl-12 pr-6 py-4 rounded-full bg-white border border-gray-200 shadow-sm focus:border-[#1C5D99] focus:ring-2 focus:ring-[#1C5D99]/20 outline-none transition-all"
+                        className="w-full pl-12 pr-6 py-4 rounded-full bg-white border border-gray-200 shadow-sm focus:border-secondary-500 focus:ring-2 focus:ring-secondary-500/20 outline-none transition-all"
                     />
                 </div>
 
                 <div className="space-y-12">
                     {faqs.map((category, catIndex) => (
                         <div key={catIndex} className="animate-fade-in-up" style={{ animationDelay: `${catIndex * 100 + 300}ms` }}>
-                            <h2 className="text-2xl font-bold text-[#1C5D99] mb-6 border-b border-gray-200 pb-2">{category.category}</h2>
+                            <h2 className="text-2xl font-bold text-secondary-500 mb-6 border-b border-gray-200 pb-2">{category.category}</h2>
                             <div className="space-y-4">
                                 {category.items.map((item, itemIndex) => {
                                     const id = `${catIndex}-${itemIndex}`;
@@ -96,18 +96,18 @@ export default function FAQPage() {
                                     return (
                                         <div
                                             key={itemIndex}
-                                            className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#F5B301] shadow-md' : 'border-gray-100 hover:border-gray-200'
+                                            className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'border-accent-500 shadow-md' : 'border-gray-100 hover:border-gray-200'
                                                 }`}
                                         >
                                             <button
                                                 onClick={() => toggleAccordion(id)}
                                                 className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
                                             >
-                                                <span className={`font-semibold text-lg transition-colors ${isOpen ? 'text-[#1C5D99]' : 'text-[#1C2533]'}`}>
+                                                <span className={`font-semibold text-lg transition-colors ${isOpen ? 'text-secondary-500' : 'text-neutral-dark'}`}>
                                                     {item.question}
                                                 </span>
                                                 {isOpen ? (
-                                                    <ChevronUp className="w-5 h-5 text-[#F5B301]" />
+                                                    <ChevronUp className="w-5 h-5 text-accent-500" />
                                                 ) : (
                                                     <ChevronDown className="w-5 h-5 text-gray-400" />
                                                 )}
@@ -117,7 +117,7 @@ export default function FAQPage() {
                                                 className={`px-6 transition-all duration-300 ease-in-out ${isOpen ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'
                                                     }`}
                                             >
-                                                <p className="text-[#6B7B8C] leading-relaxed">
+                                                <p className="text-neutral-dark/60 leading-relaxed">
                                                     {item.answer}
                                                 </p>
                                             </div>

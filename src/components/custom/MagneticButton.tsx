@@ -103,11 +103,10 @@ export function MagneticButton({
             {particles.map((p) => (
                 <span
                     key={p.id}
-                    className="absolute w-1.5 h-1.5 rounded-full bg-[#F5B301] pointer-events-none"
+                    className="absolute w-1.5 h-1.5 rounded-full bg-accent-500 pointer-events-none animate-particle-burst"
                     style={{
                         left: p.x,
                         top: p.y,
-                        animation: `particle-burst 0.5s ease-out forwards`,
                         '--tx': `${Math.cos(p.angle * Math.PI / 180) * 50}px`,
                         '--ty': `${Math.sin(p.angle * Math.PI / 180) * 50}px`,
                     } as React.CSSProperties}

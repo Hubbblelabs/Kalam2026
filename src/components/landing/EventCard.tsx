@@ -24,9 +24,9 @@ export function EventCard({
     const [isHovered, setIsHovered] = useState(false);
 
     const colorMap = {
-        blue: '#1C5D99',
-        orange: '#FF8C00',
-        yellow: '#F5B301'
+        blue: 'var(--color-secondary-500)',
+        orange: 'var(--color-accent-orange)',
+        yellow: 'var(--color-accent-500)'
     };
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -80,12 +80,11 @@ export function EventCard({
 
             {/* Shine effect on hover */}
             <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+                className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isHovered ? 'animate-shine' : ''}`}
                 style={{
                     background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
                     transform: 'translateX(-100%)',
                     opacity: isHovered ? 1 : 0,
-                    animation: isHovered ? 'shine 0.8s ease-out forwards' : 'none',
                 }}
             />
 
@@ -105,7 +104,7 @@ export function EventCard({
                     className="w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300"
                     style={{
                         borderColor: isHovered ? colorMap[accentColor] : 'rgba(0,0,0,0.1)',
-                        backgroundColor: isHovered ? '#1C2533' : 'transparent',
+                        backgroundColor: isHovered ? 'var(--color-neutral-dark)' : 'transparent',
                         color: isHovered ? 'white' : 'inherit',
                     }}
                 >
@@ -119,14 +118,13 @@ export function EventCard({
             {/* Content */}
             <div className="relative z-10 mt-auto" style={{ transform: 'translateZ(20px)' }}>
                 <h4
-                    className="font-heading text-3xl font-bold text-[#1C2533] mb-3 leading-tight transition-transform duration-300"
+                    className="font-heading text-3xl font-bold text-neutral-dark mb-3 leading-tight transition-transform duration-300"
                     style={{ transform: isHovered ? 'translateX(4px)' : 'translateX(0)' }}
                 >
                     {title}
                 </h4>
                 <p
-                    className="text-lg leading-relaxed transition-colors duration-300"
-                    style={{ color: isHovered ? '#1C2533' : '#6B7B8C' }}
+                    className={`text-lg leading-relaxed transition-colors duration-300 ${isHovered ? 'text-neutral-dark' : 'text-neutral-dark/60'}`}
                 >
                     {description}
                 </p>

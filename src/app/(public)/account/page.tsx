@@ -4,10 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { userApi, authApi } from '@/lib/api';
 import { User } from '@/types';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+// Removed unused imports
 import {
   User as UserIcon,
   Mail,
@@ -76,34 +73,34 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] flex items-center justify-center pb-20 md:pb-0">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#F5B301] border-t-transparent"></div>
+      <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary flex items-center justify-center pb-20 md:pb-0">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent-500 border-t-transparent"></div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] flex items-center justify-center pb-20 md:pb-0">
-        <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center max-w-md mx-4">
+      <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary flex items-center justify-center pb-20 md:pb-0">
+        <div className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-12 text-center max-w-md mx-4">
           <UserIcon className="w-20 h-20 mx-auto mb-4 text-white/30" />
           <h2 className="text-2xl font-bold text-white mb-2">Not logged in</h2>
           <p className="text-white/60 mb-6">
             Please log in to view your account
           </p>
-          <Button
+          <button
             onClick={() => router.push('/login')}
-            className="bg-[#F5B301] hover:bg-[#F5B301]/90 text-[#0B3C5D] font-bold"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-accent-500 hover:bg-accent-500/90 text-primary font-bold h-10 px-4 py-2"
           >
             Go to Login
-          </Button>
-        </Card>
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B3C5D] via-[#1D4E6D] to-[#0B3C5D] py-20 px-4 pb-24 md:pb-8">
+    <div className="min-h-screen bg-linear-to-br from-primary via-primary/80 to-primary py-20 px-4 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto pt-12">
         {/* Header */}
         <div className="mb-8">
@@ -117,86 +114,83 @@ export default function AccountPage() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {/* Profile Info */}
-          <Card className="md:col-span-2 bg-white/5 backdrop-blur-xl border-white/10 p-6">
+          <div className="rounded-xl border shadow md:col-span-2 bg-white/5 backdrop-blur-xl border-white/10 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white">Profile Information</h2>
               {!editing && (
-                <Button
+                <button
                   onClick={() => setEditing(true)}
-                  variant="outline"
-                  size="sm"
-                  className="border-[#F5B301]/30 text-[#F5B301] hover:bg-[#F5B301]/10"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-9 px-3 border-accent-500/30 text-accent-500 hover:bg-accent-500/10"
                 >
                   Edit Profile
-                </Button>
+                </button>
               )}
             </div>
 
             {editing ? (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name" className="text-white/80">Name</Label>
-                  <Input
+                  <label htmlFor="name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white/80">Name</label>
+                  <input
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
+                    className="flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-white/5 border-white/10 text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="phone" className="text-white/80">Phone</Label>
-                  <Input
+                  <label htmlFor="phone" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white/80">Phone</label>
+                  <input
                     id="phone"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
+                    className="flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-white/5 border-white/10 text-white"
                   />
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button
+                  <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex-1 bg-[#F5B301] hover:bg-[#F5B301]/90 text-[#0B3C5D] font-bold"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 flex-1 bg-accent-500 hover:bg-accent-500/90 text-primary font-bold h-10 px-4 py-2"
                   >
                     {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     onClick={() => {
                       setEditing(false);
                       setFormData({ name: user.name, phone: user.phone || '' });
                     }}
-                    variant="outline"
-                    className="border-white/10 text-white/80 hover:bg-white/5"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 border-white/10 text-white/80 hover:bg-white/5"
                   >
                     Cancel
-                  </Button>
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/5">
-                  <UserIcon className="w-5 h-5 text-[#F5B301]" />
+                  <UserIcon className="w-5 h-5 text-accent-500" />
                   <div>
                     <p className="text-xs text-white/60">Name</p>
                     <p className="text-white font-medium">{user.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/5">
-                  <Mail className="w-5 h-5 text-[#F5B301]" />
+                  <Mail className="w-5 h-5 text-accent-500" />
                   <div>
                     <p className="text-xs text-white/60">Email</p>
                     <p className="text-white font-medium">{user.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/5">
-                  <Phone className="w-5 h-5 text-[#F5B301]" />
+                  <Phone className="w-5 h-5 text-accent-500" />
                   <div>
                     <p className="text-xs text-white/60">Phone</p>
                     <p className="text-white font-medium">{user.phone || 'Not provided'}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-white/5 border border-white/5">
-                  <Shield className="w-5 h-5 text-[#F5B301]" />
+                  <Shield className="w-5 h-5 text-accent-500" />
                   <div>
                     <p className="text-xs text-white/60">Role</p>
                     <p className="text-white font-medium capitalize">{user.role}</p>
@@ -204,38 +198,35 @@ export default function AccountPage() {
                 </div>
               </div>
             )}
-          </Card>
+          </div>
 
           {/* Quick Actions */}
-          <Card className="bg-white/5 backdrop-blur-xl border-white/10 p-6">
+          <div className="rounded-xl border shadow bg-white/5 backdrop-blur-xl border-white/10 p-6">
             <h2 className="text-xl font-bold text-white mb-6">Quick Actions</h2>
             <div className="space-y-3">
-              <Button
+              <button
                 onClick={() => router.push('/orders')}
-                variant="outline"
-                className="w-full justify-start border-white/10 text-white/80 hover:bg-white/5"
+                className="inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 w-full justify-start border-white/10 text-white/80 hover:bg-white/5"
               >
                 <Package className="w-4 h-4 mr-2" />
                 My Orders
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={() => router.push('/cart')}
-                variant="outline"
-                className="w-full justify-start border-white/10 text-white/80 hover:bg-white/5"
+                className="inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 w-full justify-start border-white/10 text-white/80 hover:bg-white/5"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 My Cart
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={handleLogout}
-                variant="outline"
-                className="w-full justify-start border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500 mt-8"
+                className="inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 w-full justify-start border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500 mt-8"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
-              </Button>
+              </button>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

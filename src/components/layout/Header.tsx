@@ -137,13 +137,13 @@ export function Header() {
           // Responsive width and padding
           "w-[95%] max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3",
           "rounded-2xl border border-white/10 shadow-lg",
-          "bg-[#0B3C5D]",
-          isScrolled ? "border-[#F5B301]/20" : ""
+          "bg-primary",
+          isScrolled ? "border-accent-500/20" : ""
 
         )}
       >
         {/* Logo Section */}
-        <div className="flex-shrink-0 flex items-center">
+        <div className="shrink-0 flex items-center">
           <Link
             href="/"
             className="relative h-8 w-28 md:h-10 md:w-36 hover:opacity-90 transition-opacity"
@@ -169,13 +169,13 @@ export function Header() {
                 href={link.href}
                 className={cn(
                   "relative px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-300",
-                  isActive ? "text-[#F5B301]" : "text-white/80 hover:text-white"
+                  isActive ? "text-accent-500" : "text-white/80 hover:text-white"
                 )}
               >
                 {link.label}
                 {/* Active Indicator */}
                 <span className={cn(
-                  "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-[#F5B301] transition-all duration-300",
+                  "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-accent-500 transition-all duration-300",
                   isActive ? "w-1/2 opacity-100" : "w-0 opacity-0 group-hover:w-1/3"
                 )} />
               </Link>
@@ -196,7 +196,7 @@ export function Header() {
                   href={link.href}
                   className={cn(
                     "group flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all duration-200",
-                    isActive ? "bg-white/10 text-[#F5B301]" : "text-white/70 hover:text-white hover:bg-white/5"
+                    isActive ? "bg-white/10 text-accent-500" : "text-white/70 hover:text-white hover:bg-white/5"
                   )}
                   title={link.label}
                 >
@@ -245,8 +245,8 @@ export function Header() {
                     className={cn(
                       "px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
                       "text-xs sm:text-sm",
-                      "bg-[#F5B301] text-[#0B3C5D] shadow-[0_0_15px_rgba(245,179,1,0.3)]",
-                      "hover:bg-[#FFD700] hover:shadow-[0_0_25px_rgba(245,179,1,0.5)] hover:-translate-y-0.5"
+                      "bg-accent-500 text-primary shadow-[0_0_15px_rgba(245,179,1,0.3)]",
+                      "hover:bg-accent-400 hover:shadow-[0_0_25px_rgba(245,179,1,0.5)] hover:-translate-y-0.5"
                     )}
                   >
                     Register

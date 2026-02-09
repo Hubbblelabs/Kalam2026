@@ -23,14 +23,11 @@ const userSchema = new Schema<IUser>(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
     },
     phone: {
       type: String,
-      unique: true,
-      sparse: true, // Allows null/undefined to be unique
       trim: true,
     },
     college: {

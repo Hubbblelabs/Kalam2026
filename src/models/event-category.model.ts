@@ -14,7 +14,6 @@ const eventCategorySchema = new Schema<IEventCategory>(
         slug: {
             type: String,
             required: true,
-            unique: true,
         },
     },
     {
