@@ -6,7 +6,7 @@ export interface IAdmin extends Document {
     phone?: string;
     passwordHash?: string;
     department: mongoose.Types.ObjectId | null;
-    role: 'superadmin' | 'department_admin' | 'event_admin';
+    role: 'superadmin' | 'event_manager' | 'department_manager';
     assignedEvents?: mongoose.Types.ObjectId[];
     createdAt: Date;
 }
@@ -37,7 +37,7 @@ const adminSchema = new Schema<IAdmin>(
         },
         role: {
             type: String,
-            enum: ['superadmin', 'department_admin', 'event_admin'],
+            enum: ['superadmin', 'event_manager', 'department_manager'],
             required: true,
         },
         assignedEvents: [{
@@ -63,5 +63,31 @@ adminSchema.index(
         partialFilterExpression: { department: { $ne: null } },
     }
 );
+
+// Middleware to migrate old role values
+adminSchema.post(['find', 'findOne'], function (docs: any) {
+    if (!docs) return;
+
+    const migrate = (doc: any) => {
+        if (doc && doc.role) {
+            // Map old role values to new ones
+            const roleMapping: Record<string, string> = {
+                'department_admin': 'department_manager',
+                'event_admin': 'event_manager',
+            };
+
+            if (roleMapping[doc.role]) {
+                console.log(`[MIGRATION] Converting role ${doc.role} to ${roleMapping[doc.role]} for admin ${doc.email}`);
+                doc.role = roleMapping[doc.role];
+            }
+        }
+    };
+
+    if (Array.isArray(docs)) {
+        docs.forEach(migrate);
+    } else {
+        migrate(docs);
+    }
+});
 
 export const Admin = mongoose.models.Admin || mongoose.model<IAdmin>('Admin', adminSchema);

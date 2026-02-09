@@ -3,12 +3,11 @@
 import * as React from "react"
 import Link from "next/link"
 import NextImage from "next/image"
-import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
   Calendar,
   Users,
-  ShoppingCart,
   Receipt,
   Building2,
   Tags,
@@ -17,6 +16,9 @@ import {
   LogOut,
   BarChart3,
   CreditCard,
+  Megaphone,
+  Shield,
+  ClipboardList,
 } from "lucide-react"
 
 import {
@@ -33,113 +35,64 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
+import { Badge } from "@/components/ui/badge"
+import { useAdminAuth } from "@/contexts/admin-auth-context"
+import { getNavForRole, type AdminRole } from "@/lib/admin-permissions"
 
-const data = {
-  navMain: [
-    {
-      title: "Overview",
-      items: [
-        {
-          title: "Dashboard",
-          url: "/admin",
-          icon: LayoutDashboard,
-        },
-        {
-          title: "Analytics",
-          url: "/admin/analytics",
-          icon: BarChart3,
-        },
-      ],
-    },
-    {
-      title: "Management",
-      items: [
-        {
-          title: "Events",
-          url: "/admin/events",
-          icon: Calendar,
-        },
-        {
-          title: "Categories",
-          url: "/admin/categories",
-          icon: Tags,
-        },
-        {
-          title: "Departments",
-          url: "/admin/departments",
-          icon: Building2,
-        },
-      ],
-    },
-    {
-      title: "Users & Orders",
-      items: [
-        {
-          title: "Users",
-          url: "/admin/users",
-          icon: Users,
-        },
-        {
-          title: "Orders",
-          url: "/admin/orders",
-          icon: Receipt,
-        },
-        {
-          title: "Carts",
-          url: "/admin/carts",
-          icon: ShoppingCart,
-        },
-        {
-          title: "Payments",
-          url: "/admin/payments",
-          icon: CreditCard,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      items: [
-        {
-          title: "General",
-          url: "/admin/settings",
-          icon: Settings,
-        },
-      ],
-    },
-  ],
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  LayoutDashboard,
+  BarChart3,
+  Calendar,
+  Tags,
+  Building2,
+  Megaphone,
+  Users,
+  Shield,
+  ClipboardList,
+  Receipt,
+  CreditCard,
+  Settings,
+}
+
+const roleLabelMap: Record<AdminRole, string> = {
+  superadmin: "Super Admin",
+  event_manager: "Event Manager",
+  department_manager: "Dept Manager",
+}
+
+const roleBadgeVariant: Record<AdminRole, "default" | "secondary" | "outline"> = {
+  superadmin: "default",
+  event_manager: "secondary",
+  department_manager: "outline",
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
-  const [adminName, setAdminName] = React.useState("")
-  const [adminEmail, setAdminEmail] = React.useState("")
+  const pathname = usePathname()
+  const { user, role, logout, isLoading } = useAdminAuth()
 
-  React.useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const res = await fetch("/api/auth/session")
-        if (res.ok) {
-          const data = await res.json()
-          if (data.success && data.data?.user) {
-            setAdminName(data.data.user.name || "Admin")
-            setAdminEmail(data.data.user.email || "")
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch session:", error)
-      }
-    }
-    fetchSession()
-  }, [])
+  const navGroups = React.useMemo(() => {
+    if (!role) return []
+    return getNavForRole(role)
+  }, [role])
 
-  const handleSignOut = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" })
-      router.push("/admin/login")
-      router.refresh()
-    } catch (error) {
-      console.error("Sign out failed:", error)
-    }
+  if (isLoading) {
+    return (
+      <Sidebar {...props}>
+        <SidebarContent className="flex items-center justify-center">
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </SidebarContent>
+      </Sidebar>
+    )
+  }
+
+  if (!role) {
+    return (
+      <Sidebar {...props}>
+        <SidebarContent className="flex items-center justify-center">
+          <p className="text-sm text-muted-foreground">No role assigned</p>
+        </SidebarContent>
+      </Sidebar>
+    )
   }
 
   return (
@@ -169,21 +122,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {data.navMain.map((group) => (
+        {navGroups.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url}>
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {group.items.map((item) => {
+                  const Icon = iconMap[item.icon] || LayoutDashboard
+                  const isActive =
+                    item.url === "/admin"
+                      ? pathname === "/admin"
+                      : pathname.startsWith(item.url)
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <Link href={item.url}>
+                          <Icon className="size-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -194,18 +154,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarSeparator />
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/admin/profile">
+            <div className="flex items-center gap-3 px-3 py-2">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-muted">
                 <User className="size-4" />
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-medium truncate">{adminName || "Admin"}</span>
-                  <span className="text-xs text-muted-foreground truncate">{adminEmail}</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
+              </div>
+              <div className="flex flex-col leading-tight min-w-0">
+                <span className="text-sm font-medium truncate">
+                  {user?.name || "Admin"}
+                </span>
+                <span className="text-xs text-muted-foreground truncate">
+                  {user?.email || ""}
+                </span>
+                {role && (
+                  <Badge variant={roleBadgeVariant[role]} className="mt-1 w-fit text-[10px] px-1.5 py-0">
+                    {roleLabelMap[role]}
+                  </Badge>
+                )}
+              </div>
+            </div>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleSignOut} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+            <SidebarMenuButton
+              onClick={logout}
+              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+            >
               <LogOut className="size-4" />
               <span>Sign Out</span>
             </SidebarMenuButton>
