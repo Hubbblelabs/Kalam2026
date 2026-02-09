@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import NextImage from 'next/image';
 import { Instagram, Twitter, Linkedin, Facebook, ArrowUpRight, Mail, Phone } from 'lucide-react';
@@ -15,8 +15,29 @@ const socialLinks = [
 
 export function Footer() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+          setIsLoggedIn(false);
+          return;
+        }
+        const data = await res.json();
+        setIsLoggedIn(data.success && data.data?.user);
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      }
+    };
+
+    checkAuth();
+
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         const isVisible = entry.isIntersecting;
@@ -29,7 +50,12 @@ export function Footer() {
       observer.observe(containerRef.current);
     }
 
-    return () => observer.disconnect();
+    window.addEventListener('auth-change', handleAuthChange as EventListener);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('auth-change', handleAuthChange as EventListener);
+    };
   }, []);
 
   return (
@@ -172,10 +198,12 @@ export function Footer() {
                       className="object-contain"
                     />
                   </div>
-                  <Link href="/register" className="group flex items-center gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-2xl font-bold bg-white text-[#1C2533] py-2.5 px-4 sm:py-3 sm:px-5 md:py-3.5 md:px-6 lg:py-4 lg:px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
-                    Register Now
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 group-hover:rotate-45 transition-transform" />
-                  </Link>
+                  {!isLoggedIn && (
+                    <Link href="/register" className="group flex items-center gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-2xl font-bold bg-white text-[#1C2533] py-2.5 px-4 sm:py-3 sm:px-5 md:py-3.5 md:px-6 lg:py-4 lg:px-8 rounded-full hover:bg-[#F5B301] transition-all duration-300 whitespace-nowrap">
+                      Register Now
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 group-hover:rotate-45 transition-transform" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

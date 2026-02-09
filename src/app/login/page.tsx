@@ -4,7 +4,8 @@ import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
     title: 'Login',
-    description: 'Log in to access your innovator dashboard and manage your participation.',
+    description: 'Log in to manage your participation.',
+
 };
 
 export default function LoginPage() {
@@ -12,7 +13,8 @@ export default function LoginPage() {
         <AuthPageLayout
             heading="Welcome Back"
             subHeading="Innovator."
-            description="Log in to access your dashboard, manage registrations, and stay updated."
+            description="Log in to access your account, manage registrations, and stay updated."
+
             statLabel="Official Portal"
             statCount="2026 Edition"
             formTitle="Sign In"

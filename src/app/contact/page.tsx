@@ -16,7 +16,7 @@ export default function ContactPage() {
                                 Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1C5D99] to-[#F5B301]">Touch</span>
                             </h1>
                             <p className="text-xl text-[#6B7B8C] leading-relaxed">
-                                Have questions about the event? Want to sponsor us? Or just want to say hi? We'd love to hear from you.
+                                Have questions about the event? Want to sponsor us? Or just want to say hi? We&apos;d love to hear from you.
                             </p>
                         </div>
 

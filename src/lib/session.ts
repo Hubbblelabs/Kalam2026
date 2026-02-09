@@ -7,6 +7,7 @@ export interface SessionData {
     email?: string;
     name?: string;
     role?: string;
+    adminRole?: string; // superadmin, department_admin, event_admin
     isLoggedIn: boolean;
 }
 

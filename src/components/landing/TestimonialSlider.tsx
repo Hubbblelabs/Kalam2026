@@ -143,7 +143,7 @@ export function TestimonialSlider() {
                                     opacity: hoveredIndex === index ? 0.6 : 0.3,
                                 }}
                             >
-                                "
+                                &quot;
                             </span>
                             <p className="text-text-muted leading-relaxed mb-4 pl-4">
                                 {testimonial.content}

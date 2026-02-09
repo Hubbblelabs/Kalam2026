@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import NextImage from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-import { ShoppingCart, Package } from 'lucide-react';
+import { ShoppingCart, Package, User, LogOut } from 'lucide-react';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -24,12 +24,38 @@ const userLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const pathname = usePathname();
+  const router = useRouter();
   const lastScrollY = useRef(0);
 
 
   useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+          setIsLoggedIn(false);
+          return;
+        }
+        const data = await res.json();
+        if (data.success && data.data?.user) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
+        setIsLoggedIn(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSession();
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
@@ -49,16 +75,57 @@ export function Header() {
       setIsHidden(e.detail);
     };
 
+    const handleAuthChange = () => {
+      checkSession();
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('footer-visibility-change', handleFooterVisibility as EventListener);
+    window.addEventListener('auth-change', handleAuthChange as EventListener);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('footer-visibility-change', handleFooterVisibility as EventListener);
+      window.removeEventListener('auth-change', handleAuthChange as EventListener);
     };
   }, []);
 
-  if (pathname === '/login' || pathname === '/register') return null;
+  // Re-check session when pathname changes
+  useEffect(() => {
+    const recheckSession = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+          setIsLoggedIn(false);
+          return;
+        }
+        const data = await res.json();
+        if (data.success && data.data?.user) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Session recheck failed:', error);
+      }
+    };
+
+    recheckSession();
+  }, [pathname]);
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setIsLoggedIn(false);
+      window.dispatchEvent(new CustomEvent('auth-change'));
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Sign out failed:', error);
+    }
+  };
+
+  if (pathname === '/login' || pathname === '/register' || pathname.startsWith('/admin')) return null;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 md:pt-4 pointer-events-none">
@@ -142,23 +209,51 @@ export function Header() {
 
           {/* Auth Buttons */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="hidden sm:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className={cn(
-                "px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
-                "text-xs sm:text-sm",
-                "bg-[#F5B301] text-[#0B3C5D] shadow-[0_0_15px_rgba(245,179,1,0.3)]",
-                "hover:bg-[#FFD700] hover:shadow-[0_0_25px_rgba(245,179,1,0.5)] hover:-translate-y-0.5"
-              )}
-            >
-              Register
-            </Link>
+            {!isLoading && (
+              isLoggedIn ? (
+                <>
+                  <Link
+                    href="/account"
+                    className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    Account
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
+                      "text-xs sm:text-sm",
+                      "bg-red-500/10 text-red-400 border border-red-500/20",
+                      "hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30"
+                    )}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden sm:inline">Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="hidden sm:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/register"
+                    className={cn(
+                      "px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-bold tracking-wide transition-all duration-300",
+                      "text-xs sm:text-sm",
+                      "bg-[#F5B301] text-[#0B3C5D] shadow-[0_0_15px_rgba(245,179,1,0.3)]",
+                      "hover:bg-[#FFD700] hover:shadow-[0_0_25px_rgba(245,179,1,0.5)] hover:-translate-y-0.5"
+                    )}
+                  >
+                    Register
+                  </Link>
+                </>
+              )
+            )}
           </div>
         </div>
       </header>

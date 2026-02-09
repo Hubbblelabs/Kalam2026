@@ -20,6 +20,7 @@ export async function GET() {
                     name: session.name,
                     email: session.email,
                     role: session.role,
+                    adminRole: session.adminRole,
                 },
             },
         });

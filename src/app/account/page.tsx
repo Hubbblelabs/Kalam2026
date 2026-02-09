@@ -26,10 +26,6 @@ export default function AccountPage() {
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const router = useRouter();
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
   const fetchProfile = async () => {
     try {
       const response = await userApi.getProfile();
@@ -49,6 +45,11 @@ export default function AccountPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSave = async () => {
     try {

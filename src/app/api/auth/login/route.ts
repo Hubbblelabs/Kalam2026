@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const validatedData = loginSchema.parse(body);
 
-        // Find user
+        // Find user (regular users only)
         const user = await User.findOne({ email: validatedData.email });
         if (!user) {
             return NextResponse.json(
@@ -26,8 +26,15 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Verify password
-        const isValidPassword = await verifyPassword(user.password, validatedData.password);
+        // Verify password - check if passwordHash exists first
+        if (!user.passwordHash) {
+            return NextResponse.json(
+                { success: false, error: 'Invalid email or password' },
+                { status: 401 }
+            );
+        }
+
+        const isValidPassword = await verifyPassword(user.passwordHash, validatedData.password);
         if (!isValidPassword) {
             return NextResponse.json(
                 { success: false, error: 'Invalid email or password' },

@@ -1,12 +1,76 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MagneticButton } from '@/components/ui/MagneticButton';
-import { ArrowRight, Mail, Lock, User, Phone } from 'lucide-react';
+import { ArrowRight, Mail, Lock, User, Phone, Building, GraduationCap } from 'lucide-react';
+import Link from 'next/link';
 
 export function RegisterForm() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        college: '',
+        department: ''
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: `${formData.firstName} ${formData.lastName}`.trim(),
+                    email: formData.email,
+                    phone: formData.phone,
+                    password: formData.password,
+                    college: formData.college,
+                    department: formData.department
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Registration failed');
+            }
+
+            // Trigger auth state update
+            window.dispatchEvent(new CustomEvent('auth-change'));
+            
+            // Redirect on success
+            router.push('/');
+            router.refresh();
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <>
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
+                {error && (
+                    <div className="p-3 bg-red-50 text-red-500 text-sm rounded-lg border border-red-200">
+                        {error}
+                    </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2 group">
                         <label htmlFor="firstName" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">First Name</label>
@@ -17,6 +81,9 @@ export function RegisterForm() {
                             <input
                                 type="text"
                                 id="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
                                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                                 placeholder="John"
                             />
@@ -28,6 +95,9 @@ export function RegisterForm() {
                             <input
                                 type="text"
                                 id="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                required
                                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                                 placeholder="Doe"
                             />
@@ -44,6 +114,9 @@ export function RegisterForm() {
                         <input
                             type="email"
                             id="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                             className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="john@example.com"
                         />
@@ -59,8 +132,47 @@ export function RegisterForm() {
                         <input
                             type="tel"
                             id="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
                             className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="+91 98765 43210"
+                        />
+                    </div>
+                </div>
+
+                <div className="space-y-2 group">
+                    <label htmlFor="college" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">College</label>
+                    <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                            <Building className="w-4 h-4" />
+                        </div>
+                        <input
+                            type="text"
+                            id="college"
+                            value={formData.college}
+                            onChange={handleChange}
+                            required
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            placeholder="Harvard University"
+                        />
+                    </div>
+                </div>
+
+                <div className="space-y-2 group">
+                    <label htmlFor="department" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Department</label>
+                    <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                            <GraduationCap className="w-4 h-4" />
+                        </div>
+                        <input
+                            type="text"
+                            id="department"
+                            value={formData.department}
+                            onChange={handleChange}
+                            required
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            placeholder="Computer Science"
                         />
                     </div>
                 </div>
@@ -74,6 +186,10 @@ export function RegisterForm() {
                         <input
                             type="password"
                             id="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            minLength={8}
                             className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="Create a strong password"
                         />
@@ -82,11 +198,15 @@ export function RegisterForm() {
 
                 <div className="pt-4">
                     <MagneticButton className="w-full">
-                        <button className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow">
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
                             <div className="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <div className="relative flex items-center justify-center gap-3 group-hover:text-neutral-dark transition-colors">
-                                <span>Create Account</span>
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                <span>{isLoading ? 'Creating Account...' : 'Create Account'}</span>
+                                {!isLoading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                             </div>
                         </button>
                     </MagneticButton>

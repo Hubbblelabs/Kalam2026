@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
+import { Toaster } from "@/components/ui/sonner";
 import { BottomNav } from '@/components/layout/BottomNav';
 
 
@@ -61,6 +62,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-white antialiased dark:bg-gray-950">
         <Header />
         {children}
+        <Toaster />
         <BottomNav />
       </body>
     </html>

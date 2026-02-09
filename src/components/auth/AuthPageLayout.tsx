@@ -67,7 +67,7 @@ export function AuthPageLayout({
             </div>
 
             {/* Form Side */}
-            <div className="w-full lg:w-7/12 p-8 md:p-16 lg:p-24 bg-white flex flex-col justify-center min-h-screen">
+            <div className="w-full lg:w-7/12 p-8 md:p-16 lg:p-24 bg-white flex flex-col justify-center">
                 <div className="max-w-md mx-auto w-full space-y-10 animate-fade-in py-10">
 
                     {/* Mobile Header logic could be added here if needed, but sticky header usually covers it */}

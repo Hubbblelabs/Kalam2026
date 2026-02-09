@@ -1,13 +1,73 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ArrowRight, Mail, Lock } from 'lucide-react';
 import Link from 'next/link';
 
-export function LoginForm() {
+interface LoginFormProps {
+    isAdmin?: boolean;
+}
+
+export function LoginForm({ isAdmin = false }: LoginFormProps) {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const endpoint = isAdmin ? '/api/auth/admin-login' : '/api/auth/login';
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Login failed');
+            }
+
+            // Trigger auth state update
+            window.dispatchEvent(new CustomEvent('auth-change'));
+            
+            // Redirect on success based on role
+            if (isAdmin || data.data.user.role === 'admin') {
+                router.push('/admin');
+                router.refresh();
+            } else {
+                router.replace('/');
+                router.refresh();
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                {error && (
+                    <div className="p-3 bg-red-50 text-red-500 text-sm rounded-lg border border-red-200">
+                        {error}
+                    </div>
+                )}
                 <div className="space-y-5">
                     <div className="space-y-2 group">
                         <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Email Address</label>
@@ -18,6 +78,9 @@ export function LoginForm() {
                             <input
                                 type="email"
                                 id="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
                                 className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
                                 placeholder="john@example.com"
                             />
@@ -35,6 +98,9 @@ export function LoginForm() {
                             <input
                                 type="password"
                                 id="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
                                 className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
                                 placeholder="••••••••"
                             />
@@ -44,11 +110,15 @@ export function LoginForm() {
 
                 <div className="pt-2">
                     <MagneticButton className="w-full">
-                        <button className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow">
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
                             <div className="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <div className="relative flex items-center justify-center gap-3 group-hover:text-neutral-dark transition-colors">
-                                <span>Sign In</span>
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
+                                {!isLoading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                             </div>
                         </button>
                     </MagneticButton>

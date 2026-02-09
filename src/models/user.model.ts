@@ -7,6 +7,7 @@ export interface IUser extends Document {
   college?: string;
   department?: string;
   passwordHash?: string;
+  role: 'user' | 'admin';
   hasPaidEntryFee: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -40,6 +41,11 @@ const userSchema = new Schema<IUser>(
     },
     passwordHash: {
       type: String,
+    },
+    role: {
+      type: String,
+      enum: ['user'],
+      default: 'user',
     },
     hasPaidEntryFee: {
       type: Boolean,

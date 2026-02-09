@@ -1,9 +1,41 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { MagneticButton } from '@/components/ui/MagneticButton';
-import { ArrowRight, Target, Lightbulb, Users, Globe } from 'lucide-react';
+import { ArrowRight, Target, Lightbulb } from 'lucide-react';
 
 export default function AboutPage() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await fetch('/api/auth/session');
+                if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+                    setIsLoggedIn(false);
+                    return;
+                } 
+                const data = await res.json();
+                setIsLoggedIn(data.success && data.data?.user);
+            } catch (error) {
+                console.error('Auth check failed:', error);
+            } finally {
+                setIsCheckingAuth(false);
+            }
+        };
+
+        checkAuth();
+
+        const handleAuthChange = () => {
+            checkAuth();
+        };
+
+        window.addEventListener('auth-change', handleAuthChange as EventListener);
+        return () => window.removeEventListener('auth-change', handleAuthChange as EventListener);
+    }, []);
+
+
     return (
         <div className="bg-[#Fdfdf8]">
             {/* Hero Section */}
@@ -80,7 +112,7 @@ export default function AboutPage() {
                             <div className="relative bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex items-center justify-center min-h-[400px]">
                                 <blockquote className="text-center">
                                     <p className="font-heading font-bold text-2xl md:text-3xl text-[#1C2533] italic mb-6">
-                                        "Dream, dream, dream. Dreams transform into thoughts and thoughts result in action."
+                                        &quot;Dream, dream, dream. Dreams transform into thoughts and thoughts result in action.&quot;
                                     </p>
                                     <cite className="not-italic flex flex-col items-center gap-2">
                                         <span className="font-bold text-[#1C5D99]">Dr. APJ Abdul Kalam</span>
@@ -100,19 +132,21 @@ export default function AboutPage() {
                 <div className="container-custom relative z-10 text-center">
                     <h2 className="font-heading font-bold text-4xl md:text-6xl mb-8">Ready to be part of history?</h2>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-12">
-                        Join thousands of students from across the nation in this technical extravaganza. Register now and showcase your skills.
+                        Join thousands of students from across the nation in this technical extravaganza. {!isLoggedIn && 'Register now and'} Showcase your skills.
                     </p>
-                    <div className="flex justify-center">
-                        <MagneticButton href="/register">
-                            <div className="group relative px-10 py-5 bg-white text-[#1C2533] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl">
-                                <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-                                <div className="relative flex items-center gap-3 font-medium text-lg">
-                                    <span>Register Now</span>
-                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    {!isCheckingAuth && !isLoggedIn && (
+                        <div className="flex justify-center">
+                            <MagneticButton href="/register">
+                                <div className="group relative px-10 py-5 bg-white text-[#1C2533] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl">
+                                    <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                                    <div className="relative flex items-center gap-3 font-medium text-lg">
+                                        <span>Register Now</span>
+                                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    </div>
                                 </div>
-                            </div>
-                        </MagneticButton>
-                    </div>
+                            </MagneticButton>
+                        </div>
+                    )}
                 </div>
             </section>
         </div>

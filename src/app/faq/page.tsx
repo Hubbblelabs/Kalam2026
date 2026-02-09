@@ -68,7 +68,7 @@ export default function FAQPage() {
                         frequently asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1C5D99] to-[#F5B301]">questions</span>
                     </h1>
                     <p className="text-xl text-[#6B7B8C] max-w-2xl mx-auto animate-fade-in-up delay-100">
-                        Everything you need to know about Kalam 2026. Can't find the answer? Contact us directly.
+                        Everything you need to know about Kalam 2026. Can&apos;t find the answer? Contact us directly.
                     </p>
                 </div>
 

@@ -10,15 +10,43 @@ import { CursorSpotlight } from './CursorSpotlight';
 export function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Mark as loaded after mount for animations
     setIsLoaded(true);
 
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+          setIsLoggedIn(false);
+          return;
+        }
+        const data = await res.json();
+        setIsLoggedIn(data.success && data.data?.user);
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuth();
+
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('auth-change', handleAuthChange as EventListener);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('auth-change', handleAuthChange as EventListener);
+    };
   }, []);
 
   const opacity = Math.max(0, 1 - scrollY / 800);
@@ -99,29 +127,33 @@ export function HeroSection() {
         </div>
 
         {/* Interactive CTA Section with Magnetic Buttons */}
-        <div
-          className={`mt-12 md:mt-24 flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full md:w-auto px-6 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-          style={{ transitionDelay: '0.9s' }}
-        >
-          <MagneticButton href="/register" strength={0.25} className="w-full md:w-auto">
-            <div className="group relative w-full md:w-auto px-8 md:px-10 py-4 md:py-5 bg-[#1C2533] text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl flex justify-center">
-              <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-              <div className="relative flex items-center justify-center gap-3 font-medium text-base md:text-lg">
-                <span>Register Now</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </MagneticButton>
+        {!isCheckingAuth && (
+          <div
+            className={`mt-12 md:mt-24 flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full md:w-auto px-6 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            style={{ transitionDelay: '0.9s' }}
+          >
+            {!isLoggedIn && (
+              <MagneticButton href="/register" strength={0.25} className="w-full md:w-auto">
+                <div className="group relative w-full md:w-auto px-8 md:px-10 py-4 md:py-5 bg-[#1C2533] text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl flex justify-center">
+                  <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                  <div className="relative flex items-center justify-center gap-3 font-medium text-base md:text-lg">
+                    <span>Register Now</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </MagneticButton>
+            )}
 
-          <MagneticButton href="/events" strength={0.25} className="w-full md:w-auto">
-            <div className="group w-full md:w-auto px-8 md:px-10 py-4 md:py-5 rounded-full border border-[#1C2533]/10 hover:border-[#F5B301] bg-white transition-all hover:scale-105 active:scale-95 flex justify-center">
-              <div className="flex items-center justify-center gap-3 font-medium text-base md:text-lg text-[#1C2533]">
-                <Globe className="w-5 h-5" />
-                <span>Explore Events</span>
+            <MagneticButton href="/events" strength={0.25} className="w-full md:w-auto">
+              <div className="group w-full md:w-auto px-8 md:px-10 py-4 md:py-5 rounded-full border border-[#1C2533]/10 hover:border-[#F5B301] bg-white transition-all hover:scale-105 active:scale-95 flex justify-center">
+                <div className="flex items-center justify-center gap-3 font-medium text-base md:text-lg text-[#1C2533]">
+                  <Globe className="w-5 h-5" />
+                  <span>Explore Events</span>
+                </div>
               </div>
-            </div>
-          </MagneticButton>
-        </div>
+            </MagneticButton>
+          </div>
+        )}
       </div>
 
 

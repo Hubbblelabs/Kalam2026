@@ -7,6 +7,7 @@ export interface IAdmin extends Document {
     passwordHash?: string;
     department: mongoose.Types.ObjectId | null;
     role: 'superadmin' | 'department_admin' | 'event_admin';
+    assignedEvents?: mongoose.Types.ObjectId[];
     createdAt: Date;
 }
 
@@ -40,6 +41,10 @@ const adminSchema = new Schema<IAdmin>(
             enum: ['superadmin', 'department_admin', 'event_admin'],
             required: true,
         },
+        assignedEvents: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Event',
+        }],
     },
     {
         timestamps: { createdAt: true, updatedAt: false },

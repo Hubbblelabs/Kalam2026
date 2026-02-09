@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -51,6 +54,36 @@ const stats = [
 ];
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) {
+          setIsLoggedIn(false);
+          return;
+        }
+        const data = await res.json();
+        setIsLoggedIn(data.success && data.data?.user);
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuth();
+
+    const handleAuthChange = () => {
+      checkAuth();
+    };
+
+    window.addEventListener('auth-change', handleAuthChange as EventListener);
+    return () => window.removeEventListener('auth-change', handleAuthChange as EventListener);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-[#Fdfdf8] text-[#1C2533] selection:bg-[#F5B301] selection:text-[#1C2533]">
       <main className="flex-1">
@@ -70,7 +103,7 @@ export default function Home() {
                     The Numbers <br /> <span className="text-[#1C5D99] italic">Speak Louder.</span>
                   </h2>
                   <p className="text-xl text-[#6B7B8C] leading-relaxed">
-                    Kalam 2k26 is not just an event; It's a gathering of the brightest minds.
+                    Kalam 2k26 is not just an event; It&apos;s a gathering of the brightest minds.
                     Witness the scale of innovation.
                   </p>
                 </div>
@@ -111,7 +144,7 @@ export default function Home() {
                     </span>
                   </div>
                   <h2 className="font-heading text-6xl md:text-8xl font-black text-[#1C2533]">
-                    WHAT'S ON.
+                    WHAT&apos;S ON.
                   </h2>
                 </div>
                 <Link
@@ -150,7 +183,7 @@ export default function Home() {
 
                   <div className="pl-6 border-l-2 border-[#1C5D99] space-y-6 text-white/70 text-lg leading-relaxed max-w-lg">
                     <p>
-                      We don't just host events; we engineer experiences. For over 15 years, <span className="text-white font-bold">Kalam</span> has been the proving ground for the next generation of technologists.
+                      We don&apos;t just host events; we engineer experiences. For over 15 years, <span className="text-white font-bold">Kalam</span> has been the proving ground for the next generation of technologists.
                     </p>
                     <p>
                       From humble beginnings to a national phenomenon, our mission remains unchanged:
@@ -210,15 +243,17 @@ export default function Home() {
                 Join the thousands of students transforming their ideas into reality.
               </p>
 
-              <Link
-                href="/register"
-                className="relative z-10 inline-flex items-center px-12 py-6 bg-[#1C2533] text-white rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-2xl hover:shadow-[#1C5D99]/50"
-              >
-                Secure Your Spot
-                <span className="ml-3 bg-[#F5B301] text-[#1C2533] rounded-full w-8 h-8 flex items-center justify-center">
-                  →
-                </span>
-              </Link>
+              {!isCheckingAuth && (
+                <Link
+                  href={isLoggedIn ? '/events' : '/register'}
+                  className="relative z-10 inline-flex items-center px-12 py-6 bg-[#1C2533] text-white rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-2xl hover:shadow-[#1C5D99]/50"
+                >
+                  {isLoggedIn ? 'Explore Events' : 'Secure Your Spot'}
+                  <span className="ml-3 bg-[#F5B301] text-[#1C2533] rounded-full w-8 h-8 flex items-center justify-center">
+                    →
+                  </span>
+                </Link>
+              )}
             </ScrollSection>
           </div>
         </section>

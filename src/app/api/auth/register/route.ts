@@ -10,6 +10,8 @@ const registerSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8),
     phone: z.string().optional(),
+    college: z.string().min(2).max(100),
+    department: z.string().min(2).max(100),
 });
 
 export async function POST(request: NextRequest) {
@@ -35,8 +37,10 @@ export async function POST(request: NextRequest) {
         const user = await User.create({
             name: validatedData.name,
             email: validatedData.email,
-            password: hashedPassword,
+            passwordHash: hashedPassword,
             phone: validatedData.phone,
+            college: validatedData.college,
+            department: validatedData.department,
         });
 
         // Create session
