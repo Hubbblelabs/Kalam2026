@@ -44,7 +44,7 @@ export function LoginForm({ isAdmin = false }: LoginFormProps) {
 
             // Trigger auth state update
             window.dispatchEvent(new CustomEvent('auth-change'));
-            
+
             // Redirect on success based on role
             if (isAdmin || data.data.user.role === 'admin') {
                 router.push('/admin');
@@ -70,9 +70,9 @@ export function LoginForm({ isAdmin = false }: LoginFormProps) {
                 )}
                 <div className="space-y-5">
                     <div className="space-y-2 group">
-                        <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Email Address</label>
+                        <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Email Address</label>
                         <div className="relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                                 <Mail className="w-5 h-5" />
                             </div>
                             <input
@@ -81,18 +81,18 @@ export function LoginForm({ isAdmin = false }: LoginFormProps) {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
+                                className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
                                 placeholder="john@example.com"
                             />
                         </div>
                     </div>
                     <div className="space-y-2 group">
                         <div className="flex justify-between items-center">
-                            <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Password</label>
-                            <Link href="/forgot-password" className="text-xs text-primary-600 font-bold hover:text-accent-700 underline decoration-transparent hover:decoration-accent transition-all">Forgot password?</Link>
+                            <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Password</label>
+                            <Link href="/forgot-password" className="text-xs text-primary-600 font-bold hover:text-[#F5B301] underline decoration-transparent hover:decoration-[#F5B301] transition-all">Forgot password?</Link>
                         </div>
                         <div className="relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                                 <Lock className="w-5 h-5" />
                             </div>
                             <input
@@ -101,7 +101,7 @@ export function LoginForm({ isAdmin = false }: LoginFormProps) {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
+                                className="w-full pl-12 pr-5 py-3.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -115,7 +115,7 @@ export function LoginForm({ isAdmin = false }: LoginFormProps) {
                             disabled={isLoading}
                             className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            <div className="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                            <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <div className="relative flex items-center justify-center gap-3 group-hover:text-neutral-dark transition-colors">
                                 <span>{isLoading ? 'Signing In...' : 'Sign In'}</span>
                                 {!isLoading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}

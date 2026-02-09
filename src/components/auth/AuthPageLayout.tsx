@@ -31,7 +31,7 @@ export function AuthPageLayout({
     return (
         <div className="min-h-screen w-full flex bg-gray-50">
             {/* Visual Side (Yellow Panel) - Hidden on mobile, 5/12 width on desktop */}
-            <div className="hidden lg:flex w-5/12 bg-accent relative p-12 text-neutral-dark flex-col justify-between overflow-hidden sticky top-0 h-screen">
+            <div className="hidden lg:flex w-5/12 bg-[#F5B301] relative p-12 text-neutral-dark flex-col justify-between overflow-hidden sticky top-0 h-screen">
                 {/* Background elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-0 w-80 h-80 bg-orange-400/20 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/3" />

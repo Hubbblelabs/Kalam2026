@@ -1,6 +1,5 @@
 onlyBuiltDependencies:
   - argon2
-  - bcrypt
   - esbuild
   - sharp
   - unrs-resolver

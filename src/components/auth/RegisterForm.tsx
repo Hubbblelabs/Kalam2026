@@ -51,7 +51,7 @@ export function RegisterForm() {
 
             // Trigger auth state update
             window.dispatchEvent(new CustomEvent('auth-change'));
-            
+
             // Redirect on success
             router.push('/');
             router.refresh();
@@ -73,9 +73,9 @@ export function RegisterForm() {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2 group">
-                        <label htmlFor="firstName" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">First Name</label>
+                        <label htmlFor="firstName" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">First Name</label>
                         <div className="relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                                 <User className="w-4 h-4" />
                             </div>
                             <input
@@ -84,13 +84,13 @@ export function RegisterForm() {
                                 value={formData.firstName}
                                 onChange={handleChange}
                                 required
-                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                                className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                                 placeholder="John"
                             />
                         </div>
                     </div>
                     <div className="space-y-2 group">
-                        <label htmlFor="lastName" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Last Name</label>
+                        <label htmlFor="lastName" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Last Name</label>
                         <div className="relative">
                             <input
                                 type="text"
@@ -98,7 +98,7 @@ export function RegisterForm() {
                                 value={formData.lastName}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                                 placeholder="Doe"
                             />
                         </div>
@@ -106,9 +106,9 @@ export function RegisterForm() {
                 </div>
 
                 <div className="space-y-2 group">
-                    <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Email Address</label>
+                    <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Email Address</label>
                     <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                             <Mail className="w-4 h-4" />
                         </div>
                         <input
@@ -117,16 +117,16 @@ export function RegisterForm() {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="john@example.com"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-2 group">
-                    <label htmlFor="phone" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Phone Number</label>
+                    <label htmlFor="phone" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Phone Number</label>
                     <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                             <Phone className="w-4 h-4" />
                         </div>
                         <input
@@ -135,16 +135,16 @@ export function RegisterForm() {
                             value={formData.phone}
                             onChange={handleChange}
                             required
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="+91 98765 43210"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-2 group">
-                    <label htmlFor="college" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">College</label>
+                    <label htmlFor="college" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">College</label>
                     <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                             <Building className="w-4 h-4" />
                         </div>
                         <input
@@ -153,16 +153,16 @@ export function RegisterForm() {
                             value={formData.college}
                             onChange={handleChange}
                             required
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="Harvard University"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-2 group">
-                    <label htmlFor="department" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Department</label>
+                    <label htmlFor="department" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Department</label>
                     <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                             <GraduationCap className="w-4 h-4" />
                         </div>
                         <input
@@ -171,16 +171,16 @@ export function RegisterForm() {
                             value={formData.department}
                             onChange={handleChange}
                             required
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="Computer Science"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-2 group">
-                    <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-accent-700 transition-colors">Password</label>
+                    <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 group-focus-within:text-[#F5B301] transition-colors">Password</label>
                     <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-600 transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F5B301] transition-colors">
                             <Lock className="w-4 h-4" />
                         </div>
                         <input
@@ -190,7 +190,7 @@ export function RegisterForm() {
                             onChange={handleChange}
                             required
                             minLength={8}
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#F5B301] focus:ring-4 focus:ring-[#F5B301]/20 outline-none transition-all placeholder:text-gray-300 font-medium text-neutral-dark shadow-sm text-sm"
                             placeholder="Create a strong password"
                         />
                     </div>
@@ -203,7 +203,7 @@ export function RegisterForm() {
                             disabled={isLoading}
                             className="w-full relative px-8 py-4 bg-neutral-dark text-white rounded-xl overflow-hidden group font-bold text-lg shadow-xl shadow-neutral-dark/20 hover:shadow-neutral-dark/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            <div className="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                            <div className="absolute inset-0 bg-[#F5B301] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                             <div className="relative flex items-center justify-center gap-3 group-hover:text-neutral-dark transition-colors">
                                 <span>{isLoading ? 'Creating Account...' : 'Create Account'}</span>
                                 {!isLoading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}

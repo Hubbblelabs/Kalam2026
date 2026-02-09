@@ -44,7 +44,7 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['user'],
+      enum: ['user', 'admin'],
       default: 'user',
     },
     hasPaidEntryFee: {
